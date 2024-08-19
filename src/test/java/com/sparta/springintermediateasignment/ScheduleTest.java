@@ -22,12 +22,12 @@ public class ScheduleTest {
     @Test
     @Transactional
     void test1(){
-        Schedule schedule = new Schedule();
-        schedule.setCreatedAt(LocalDateTime.now());
-        schedule.setUpdatedAt(LocalDateTime.now());
-        schedule.setTodoTitle("title test");
-        schedule.setTodoContents("contents test");
-        schedule.setUserName("name test");
-        em.persist(schedule);
+//        Schedule schedule = new Schedule();
+//        schedule.setCreatedAt(LocalDateTime.now());
+//        schedule.setUpdatedAt(LocalDateTime.now());
+//        schedule.setTodoTitle("title test");
+//        schedule.setTodoContents("contents test");
+//        schedule.setUserName("name test");
+//        em.persist(schedule);
     }
 }

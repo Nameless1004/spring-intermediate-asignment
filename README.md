@@ -14,3 +14,4 @@
 | 일정 조회     | GET    | /api/schedules/{scheduleId} | 요청 param | 단건 응답 정보 | 200:정상조회 |
 | 일정 수정     | PUT    | /api/schedules/{scheduleId}  | 요청 param | 수정 정보    | 200:정상수정 |
 # ERD
+![](./images/erd.png)
