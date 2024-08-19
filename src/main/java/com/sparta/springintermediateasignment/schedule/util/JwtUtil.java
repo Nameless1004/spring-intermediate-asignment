@@ -1,6 +1,6 @@
 package com.sparta.springintermediateasignment.schedule.util;
 
-import com.sparta.springintermediateasignment.schedule.define.UserRole;
+import com.sparta.springintermediateasignment.user.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

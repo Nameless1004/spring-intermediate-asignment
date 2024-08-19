@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.schedule.entity;
 
+import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.schedule.define;
+package com.sparta.springintermediateasignment.user.enums;
 
 public enum UserRole {
     USER(Authority.USER),  // 사용자 권한
