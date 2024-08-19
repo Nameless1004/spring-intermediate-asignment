@@ -1,6 +1,6 @@
 package com.sparta.springintermediateasignment;
 
-import com.sparta.springintermediateasignment.domain.entity.Schedule;
+import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
