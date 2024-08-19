@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +51,12 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ScheduleDto patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule) {
         return service.update(id, schedule);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> patchSchedule(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -2,6 +2,7 @@ package com.sparta.springintermediateasignment.schedule.entity;
 
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,8 +47,9 @@ public class Schedule {
     @Setter
     @Column(name="updated_date", nullable = false)
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "schedule")
+    
+    // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public static Schedule of(ScheduleDto dto){

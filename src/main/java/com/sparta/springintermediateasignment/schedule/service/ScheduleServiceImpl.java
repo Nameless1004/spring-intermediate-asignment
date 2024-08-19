@@ -61,4 +61,12 @@ public class ScheduleServiceImpl implements ScheduleService {
             .toList();
     }
 
+    @Override
+    public void delete(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id입니다."));
+
+        scheduleRepository.delete(schedule);
+    }
+
 }

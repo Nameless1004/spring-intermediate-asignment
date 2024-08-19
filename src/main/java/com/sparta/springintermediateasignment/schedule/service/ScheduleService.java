@@ -11,4 +11,6 @@ public interface ScheduleService {
     ScheduleDto update(Long id, ScheduleUpdateDto scheduleRequestDto);
 
     List<ScheduleDto> findAll(Pageable pageable);
+
+    void delete(Long id);
 }
