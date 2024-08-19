@@ -1,13 +1,15 @@
 package com.sparta.springintermediateasignment.schedule.controller;
 
 import com.sparta.springintermediateasignment.comment.dto.CommentDto;
-import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,11 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ScheduleDto getSchedule(@PathVariable Long scheduleId) {
         return service.findById(scheduleId);
+    }
+
+    @GetMapping
+    public List<ScheduleDto> getSchedules(@PageableDefault( size = 10, sort = "updatedAt", direction = Direction.DESC) Pageable pageable) {
+        return service.findAll(pageable);
     }
 
     @GetMapping("/{scheduleId}/comments")

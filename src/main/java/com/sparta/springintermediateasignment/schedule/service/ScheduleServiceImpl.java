@@ -1,12 +1,14 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
+import com.sparta.springintermediateasignment.comment.repository.CommentRepository;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
-import com.sparta.springintermediateasignment.comment.repository.CommentRepository;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,4 +52,13 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return ScheduleDto.of(schedule);
     }
+
+    @Override
+    public List<ScheduleDto> findAll(Pageable pageable) {
+        return scheduleRepository.findAll(pageable)
+            .stream()
+            .map(ScheduleDto::of)
+            .toList();
+    }
+
 }
