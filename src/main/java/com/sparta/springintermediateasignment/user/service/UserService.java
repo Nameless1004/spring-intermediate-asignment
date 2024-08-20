@@ -1,7 +1,9 @@
 package com.sparta.springintermediateasignment.user.service;
 
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
+import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
@@ -19,4 +21,6 @@ public interface UserService {
     void addManager(ManagerAddRequestDto userDto);
 
     void deleteManager(ManagerAddRequestDto userDto);
+
+    void signup(SignupRequestDto requestDto, HttpServletResponse res);
 }
