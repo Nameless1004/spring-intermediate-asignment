@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
             .name(requestDto.getUsername())
             .email(requestDto.getEmail())
-            .password(requestDto.getPassword())
+            .password(password)
             .build();
         String token = jwtUtil.createToken(username, UserRole.USER);
         userRepository.save(user);
@@ -144,7 +144,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("등록되지 않은 이메일입니다."));
 
         // 비밀번호 확인
-        if(!user.getPassword().equals(password)){
+        System.out.println("user.getPassword() = " + user.getPassword());
+        System.out.println("password = " + password);
+
+        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 

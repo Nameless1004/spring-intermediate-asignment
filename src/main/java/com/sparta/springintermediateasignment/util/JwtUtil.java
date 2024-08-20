@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.util;
 
 import com.sparta.springintermediateasignment.user.enums.UserRole;
+import com.sparta.springintermediateasignment.user.filter.ErrorInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +23,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -89,17 +91,25 @@ public class JwtUtil {
     }
 
     // 토큰 검증
-    public boolean validateToken(String token){
+    public boolean validateToken(String token, ErrorInfo errorInfo) {
         try{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
+            errorInfo.setMsg("Invalid JWT signature, 유효하지 않은 JWT 서명입니다.");
+            errorInfo.setHttpStatus(HttpStatus.BAD_REQUEST);
             logger.error("Invalid JWT signature, 유효하지 않은 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
+            errorInfo.setMsg("Expired JWT token, 만료된 JWT 토큰 입니다.");
+            errorInfo.setHttpStatus(HttpStatus.UNAUTHORIZED);
             logger.error("Expired JWT token, 만료된 JWT 토큰 입니다.");
         } catch (UnsupportedJwtException e) {
+            errorInfo.setMsg("Invalid JWT signature, 유효하지 않은 JWT 서명입니다.");
+            errorInfo.setHttpStatus(HttpStatus.BAD_REQUEST);
             logger.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
+            errorInfo.setMsg("Invalid JWT signature, 유효하지 않은 JWT 서명입니다.");
+            errorInfo.setHttpStatus(HttpStatus.BAD_REQUEST);
             logger.error("JWT claims string is empty, 잘못된 JWT 토큰 입니다.");
         }
 
@@ -113,6 +123,23 @@ public class JwtUtil {
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
     public String getTokenFromRequest(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
+                    try {
+                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                    } catch (UnsupportedEncodingException e) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    // HttpServletRequest 에서 Cookie Value : JWT 가져오기
+    public String getTokenFromRequest2(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if(cookies != null) {
             for (Cookie cookie : cookies) {
