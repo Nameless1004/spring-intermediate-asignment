@@ -18,14 +18,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleManager {
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="schedule_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 }

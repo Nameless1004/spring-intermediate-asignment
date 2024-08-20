@@ -15,7 +15,6 @@ import com.sparta.springintermediateasignment.user.repository.ScheduleManagerRep
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import com.sparta.springintermediateasignment.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -99,27 +98,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public JwtTokenResponseDto signup(SignupRequestDto requestDto, HttpServletResponse res){
+    public JwtTokenResponseDto signup(SignupRequestDto requestDto, HttpServletResponse res) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByName(username);
-        if(checkUsername.isPresent()){
+        if (checkUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
         // 이메일 중복 확인
         String email = requestDto.getEmail();
         Optional<User> checkEmail = userRepository.findByEmail(email);
-        if(checkEmail.isPresent()){
+        if (checkEmail.isPresent()) {
             throw new IllegalArgumentException("중복된 Email 입니다.");
         }
 
         // 사용자 권한 확인
         UserRole role = UserRole.USER;
-        if(requestDto.isAdmin()){
-            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
+        if (requestDto.isAdmin()) {
+            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
             role = UserRole.ADMIN;
@@ -144,18 +143,20 @@ public class UserServiceImpl implements UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원있는지 확인
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("등록되지 않은 이메일입니다."));
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 이메일입니다."));
 
         // 비밀번호 확인
         System.out.println("user.getPassword() = " + user.getPassword());
         System.out.println("password = " + password);
 
-        if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
         // 사용자 권한 확인
-        UserRole role = user.getRole().equals(UserRole.USER) ? UserRole.USER : UserRole.ADMIN;
+        UserRole role = user.getRole()
+            .equals(UserRole.USER) ? UserRole.USER : UserRole.ADMIN;
 
         // 사용자 등록 후 jwt 생성 반환
         String token = jwtUtil.createToken(user.getName(), role);

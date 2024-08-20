@@ -49,18 +49,20 @@ public class ScheduleServiceImpl implements ScheduleService {
         User user = userRepository.findById(scheduleRequestDto.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id입니다."));
 
-        Schedule schedule = new Schedule(user, scheduleRequestDto.getTodoTitle(), scheduleRequestDto.getTodoContents());
+        Schedule schedule = new Schedule(user, scheduleRequestDto.getTodoTitle(),
+            scheduleRequestDto.getTodoContents());
 
         // 없으면 불러와서 캐싱
-        if(weatherByDate.isEmpty()){
+        if (weatherByDate.isEmpty()) {
             String url = "https://f-api.github.io/f-api/weather.json";
             DateDto[] responseData = restTemplate.getForObject(url, DateDto[].class);
-            for(DateDto dateDto : responseData){
+            for (DateDto dateDto : responseData) {
                 weatherByDate.put(dateDto.getDate(), dateDto.getWeather());
             }
         }
 
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd"));
+        String date = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("MM-dd"));
         schedule.setWeather(weatherByDate.get(date));
 
         scheduleRepository.save(schedule);
@@ -74,7 +76,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getUser().getId())
+            .userId(schedule.getUser()
+                .getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
@@ -91,10 +94,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         List<ScheduleAllResponseDto> result = new ArrayList<>();
 
-        for(Schedule schedule : schedules) {
+        for (Schedule schedule : schedules) {
             ScheduleAllResponseDto responseDto = ScheduleAllResponseDto.builder()
                 .scheduleId(schedule.getId())
-                .userId(schedule.getUser().getId())
+                .userId(schedule.getUser()
+                    .getId())
                 .scheduleTitle(schedule.getTodoTitle())
                 .scheduleContents(schedule.getTodoContents())
                 .createdAt(schedule.getCreatedDate())
@@ -119,9 +123,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleRepository.save(schedule);
 
-        return  ScheduleResponseDto.builder()
+        return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getUser().getId())
+            .userId(schedule.getUser()
+                .getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())

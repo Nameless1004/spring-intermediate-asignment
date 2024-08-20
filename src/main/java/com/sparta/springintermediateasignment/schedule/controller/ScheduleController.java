@@ -35,26 +35,31 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleAllResponseDto>> getSchedules(@PageableDefault( size = 10, sort = "updatedDate", direction = Direction.DESC) Pageable pageable) {
+    public ResponseEntity<List<ScheduleAllResponseDto>> getSchedules(
+        @PageableDefault(size = 10, sort = "updatedDate", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(service.getAllSchedule(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> postSchedule(@RequestBody ScheduleRequestDto schedule) {
+    public ResponseEntity<ScheduleResponseDto> postSchedule(
+        @RequestBody ScheduleRequestDto schedule) {
         Long id = service.saveSchedule(schedule);
         ScheduleResponseDto scheduleResponseDto = service.getScheduleById(id);
         return ResponseEntity.ok(scheduleResponseDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id,
+        @Valid @RequestBody ScheduleUpdateDto schedule,
+        @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(service.updateSchedule(id, schedule));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+            .build();
     }
 
 }

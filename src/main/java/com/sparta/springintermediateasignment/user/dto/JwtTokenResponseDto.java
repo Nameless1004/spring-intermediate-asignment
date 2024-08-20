@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtTokenResponseDto {
+
     private String token;
 }

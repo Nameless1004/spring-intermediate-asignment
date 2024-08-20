@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 @Component
 public class JwtUtil {
+
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // 사용자 권한 값의 KEY
@@ -49,8 +50,9 @@ public class JwtUtil {
 
     // 객체 생성자 호출 후 호출됨
     @PostConstruct
-    public void init(){
-        byte[] bytes = Base64.getDecoder().decode(secretKey);
+    public void init() {
+        byte[] bytes = Base64.getDecoder()
+            .decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
 
@@ -69,8 +71,8 @@ public class JwtUtil {
     }
 
     // Cookie에 들어있던 JWT 토큰을 Substring
-    public String substringToken(String tokenValue){
-        if(StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)){
+    public String substringToken(String tokenValue) {
+        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
         logger.error("Not Found Token");
@@ -79,8 +81,11 @@ public class JwtUtil {
 
     // 토큰 검증
     public boolean validateToken(String token, ErrorInfo errorInfo) {
-        try{
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             errorInfo.setMsg("Invalid JWT signature, 유효하지 않은 JWT 서명입니다.");
@@ -104,34 +109,39 @@ public class JwtUtil {
     }
 
     // JWT에서 사용자 정보 가져오기
-    public Claims getUserInfoFromToken(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    public Claims getUserInfoFromToken(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
     }
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
     public String getTokenFromRequest(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
-        if(cookies != null) {
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
-                    try {
-                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
-                    } catch (UnsupportedEncodingException e) {
-                        return null;
-                    }
+                if (cookie.getName()
+                    .equals(AUTHORIZATION_HEADER)) {
+                    return URLDecoder.decode(cookie.getValue(),
+                        StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
                 }
             }
         }
         return null;
     }
 
-    public void jwtExceptionHandler(HttpServletResponse response, ErrorInfo errorInfo, Logger logger) {
-        response.setStatus(errorInfo.getHttpStatus().value());
+    public void jwtExceptionHandler(HttpServletResponse response, ErrorInfo errorInfo,
+        Logger logger) {
+        response.setStatus(errorInfo.getHttpStatus()
+            .value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try {
             String json = new ObjectMapper().writeValueAsString(errorInfo);
-            response.getWriter().write(json);
+            response.getWriter()
+                .write(json);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

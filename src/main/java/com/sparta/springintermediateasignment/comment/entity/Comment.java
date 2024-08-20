@@ -23,15 +23,16 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="comment")
+@Table(name = "comment")
 public class Comment extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_id")
+    @Column(name = "comment_id")
     private Long id;
 
     @Setter
-    @Column(name="writer_name", nullable = false)
+    @Column(name = "writer_name", nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,11 +40,11 @@ public class Comment extends BaseTimeEntity {
     private Schedule schedule;
 
     @Setter
-    @Column(name ="comment_contents", nullable = false)
+    @Column(name = "comment_contents", nullable = false)
     private String contents;
 
 
-    public static Comment of(Schedule schedule, CommentDto dto){
+    public static Comment of(Schedule schedule, CommentDto dto) {
         return Comment.builder()
             .id(dto.getCommentId())
             .name(dto.getWriterName())

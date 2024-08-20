@@ -22,7 +22,8 @@ public class ScheduleFindDto {
     private List<CommentDto> comments;
     private List<ManagerDto> schedulers;
 
-    public static ScheduleFindDto of(User user, List<CommentDto> commentDtos, List<ManagerDto> managerDtos, Schedule schedule) {
+    public static ScheduleFindDto of(User user, List<CommentDto> commentDtos,
+        List<ManagerDto> managerDtos, Schedule schedule) {
         return ScheduleFindDto.builder()
             .id(schedule.getId())
             .userId(user.getId())

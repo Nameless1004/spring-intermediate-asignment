@@ -1,7 +1,6 @@
 package com.sparta.springintermediateasignment.user.entity;
 
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
-import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
 import jakarta.persistence.CascadeType;
@@ -26,16 +25,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="user")
+@Table(name = "user")
 public class User extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
-    @Column(name="user_password", nullable=false)
+    @Column(name = "user_password", nullable = false)
     private String password;
-    @Column(name="user_name", nullable=false)
+    @Column(name = "user_name", nullable = false)
     private String name;
-    @Column(name="user_email", nullable = false)
+    @Column(name = "user_email", nullable = false)
     private String email;
 
     @Enumerated(value = EnumType.STRING)
@@ -45,7 +46,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduleManager> schedules = new ArrayList<>();
 
-    public static User of(UserDto dto){
+    public static User of(UserDto dto) {
         return User.builder()
             .name(dto.getName())
             .email(dto.getEmail())

@@ -1,15 +1,9 @@
 package com.sparta.springintermediateasignment.user.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import com.sparta.springintermediateasignment.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +12,6 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import javax.lang.model.type.ErrorType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -66,7 +59,7 @@ public class AuthFilter implements Filter {
 
                 // 토큰 검증
                 if (!jwtUtil.validateToken(token, errorInfo)) {
-                    jwtUtil.jwtExceptionHandler((HttpServletResponse)response, errorInfo, log);
+                    jwtUtil.jwtExceptionHandler((HttpServletResponse) response, errorInfo, log);
                     return;
                 }
 
@@ -79,7 +72,8 @@ public class AuthFilter implements Filter {
                 request.setAttribute("user", user);
                 chain.doFilter(request, response); // 다음 Filter 로 이동
             } else {
-                jwtUtil.jwtExceptionHandler((HttpServletResponse)response, new ErrorInfo("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST), log);
+                jwtUtil.jwtExceptionHandler((HttpServletResponse) response,
+                    new ErrorInfo("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST), log);
             }
         }
     }

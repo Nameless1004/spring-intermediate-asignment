@@ -22,10 +22,13 @@ import org.springframework.util.StringUtils;
 @Component
 @Order(3)
 @RequiredArgsConstructor
-public class AdminFilter  implements Filter {
+public class AdminFilter implements Filter {
+
     private final JwtUtil jwtUtil;
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String url = httpServletRequest.getRequestURI();
 
@@ -39,9 +42,11 @@ public class AdminFilter  implements Filter {
             // 일정의 삭제 수정은 어드민만 할 수 있다.
             // 권한이 유저이면
             log.info(role);
-            if((method.equals("DELETE") || method.equals("PATCH")) && role.equals(UserRole.USER.getAuthority())) {
+            if ((method.equals("DELETE") || method.equals("PATCH")) && role.equals(
+                UserRole.USER.getAuthority())) {
                 ErrorInfo errorInfo = new ErrorInfo();
-                jwtUtil.jwtExceptionHandler((HttpServletResponse) response, new ErrorInfo("권한이 없습니다.", HttpStatus.FORBIDDEN), log);
+                jwtUtil.jwtExceptionHandler((HttpServletResponse) response,
+                    new ErrorInfo("권한이 없습니다.", HttpStatus.FORBIDDEN), log);
                 return;
             }
         }

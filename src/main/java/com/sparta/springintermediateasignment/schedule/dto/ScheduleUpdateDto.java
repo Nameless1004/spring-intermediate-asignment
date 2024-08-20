@@ -7,6 +7,7 @@ import lombok.Getter;
 @Data
 @Getter
 public class ScheduleUpdateDto {
+
     @NotBlank
     private String title;
     @NotBlank

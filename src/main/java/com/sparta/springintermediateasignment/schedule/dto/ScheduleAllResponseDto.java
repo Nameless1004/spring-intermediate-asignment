@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ScheduleAllResponseDto {
+
     private Long scheduleId;
     private Long userId;
     private String scheduleTitle;

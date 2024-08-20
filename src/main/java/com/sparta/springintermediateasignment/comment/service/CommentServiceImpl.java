@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
-    
+
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
 

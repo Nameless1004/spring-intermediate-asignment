@@ -12,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class DateDto {
+
     private String date;
     private String weather;
 }

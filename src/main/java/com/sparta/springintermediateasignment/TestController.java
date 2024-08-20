@@ -1,9 +1,5 @@
 package com.sparta.springintermediateasignment;
 
-import com.sparta.springintermediateasignment.user.entity.User;
-import jakarta.servlet.http.HttpServletRequest;
-import java.net.http.HttpHeaders;
-import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +16,6 @@ public class TestController {
 
     @GetMapping("/api/test")
     public String getTest2(@RequestHeader("Authorization") String token) {
-        return  token;
+        return token;
     }
 }

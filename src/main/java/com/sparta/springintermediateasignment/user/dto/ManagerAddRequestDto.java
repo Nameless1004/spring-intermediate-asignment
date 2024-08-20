@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ManagerAddRequestDto {
+
     private Long scheduleId;
     private Long managerId;
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduleManagerInfoDto {
+
     private Long id;
     private String name;
     private String email;

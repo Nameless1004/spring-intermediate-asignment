@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CommentDto {
+
     private Long commentId;
     @NotNull
     private Long scheduleId;
@@ -25,7 +26,8 @@ public class CommentDto {
     public static CommentDto of(Comment comment) {
         return CommentDto.builder()
             .commentId(comment.getId())
-            .scheduleId(comment.getSchedule().getId())
+            .scheduleId(comment.getSchedule()
+                .getId())
             .writerName(comment.getName())
             .contents(comment.getContents())
             .createdAt(comment.getCreatedDate())

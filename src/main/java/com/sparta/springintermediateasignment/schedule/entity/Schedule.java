@@ -20,27 +20,28 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
 @Table(name = "schedule")
 @NoArgsConstructor
 public class Schedule extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="schedule_id")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Setter
-    @Column(name="todo_title", nullable=false)
+    @Column(name = "todo_title", nullable = false)
     private String todoTitle;
 
     @Setter
-    @Column(name="todo_contents", nullable=false)
+    @Column(name = "todo_contents", nullable = false)
     private String todoContents;
 
     @Setter
@@ -48,11 +49,11 @@ public class Schedule extends BaseTimeEntity {
 
     // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     // 담당 유저 조회
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ScheduleManager> scheduleManagers = new ArrayList<>();
+    private final List<ScheduleManager> scheduleManagers = new ArrayList<>();
 
     public Schedule(User user, String todoTitle, String todoContents) {
         this.user = user;
