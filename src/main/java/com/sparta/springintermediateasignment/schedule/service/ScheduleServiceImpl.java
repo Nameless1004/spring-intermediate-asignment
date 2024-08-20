@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
 import com.sparta.springintermediateasignment.comment.dto.CommentDto;
+import com.sparta.springintermediateasignment.schedule.dto.DateDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
@@ -11,14 +12,19 @@ import com.sparta.springintermediateasignment.schedule.repository.ScheduleReposi
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import com.sparta.springintermediateasignment.util.JwtUtil;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    // 날씨 캐싱용
+    Map<String, String> weatherByDate = new HashMap<>();
+
     // 저장
     @Override
     @Transactional(readOnly = false)
@@ -39,6 +50,18 @@ public class ScheduleServiceImpl implements ScheduleService {
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id입니다."));
 
         Schedule schedule = new Schedule(user, scheduleRequestDto.getTodoTitle(), scheduleRequestDto.getTodoContents());
+
+        // 없으면 불러와서 캐싱
+        if(weatherByDate.isEmpty()){
+            String url = "https://f-api.github.io/f-api/weather.json";
+            DateDto[] responseData = restTemplate.getForObject(url, DateDto[].class);
+            for(DateDto dateDto : responseData){
+                weatherByDate.put(dateDto.getDate(), dateDto.getWeather());
+            }
+        }
+
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd"));
+        schedule.setWeather(weatherByDate.get(date));
 
         scheduleRepository.save(schedule);
         return schedule.getId();

@@ -43,6 +43,9 @@ public class Schedule extends BaseTimeEntity {
     @Column(name="todo_contents", nullable=false)
     private String todoContents;
 
+    @Setter
+    private String weather;
+
     // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
