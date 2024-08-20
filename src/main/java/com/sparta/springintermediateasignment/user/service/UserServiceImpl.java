@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.user.service;
 
 import com.sparta.springintermediateasignment.exceptoins.InvalidIdException;
+import com.sparta.springintermediateasignment.exceptoins.PasswordMissmatchException;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 @RequiredArgsConstructor
@@ -151,7 +153,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("password = " + password);
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new PasswordMissmatchException();
         }
 
         // 사용자 권한 확인
@@ -168,4 +170,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id입니다."));
     }
+
 }
