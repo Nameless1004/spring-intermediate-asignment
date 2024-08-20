@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.comment.controller;
 
 import com.sparta.springintermediateasignment.comment.dto.CommentDto;
+import com.sparta.springintermediateasignment.comment.dto.CommentUpdateDto;
 import com.sparta.springintermediateasignment.comment.service.CommentService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -21,30 +22,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comments")
+// 수정
+@RequestMapping("/api/schedules/comments")
 @Validated
 public class CommentController {
     private final CommentService service;
 
     @PostMapping
-    public Long postScheduleComment(@Valid @RequestBody CommentDto commentDto, @RequestParam Long scheduleId) {
-        return service.save(scheduleId, commentDto);
+    public ResponseEntity<CommentDto> postScheduleComment(@Valid @RequestBody CommentDto commentDto) {
+        Long id = service.save(commentDto);
+        CommentDto dto = service.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PatchMapping("/{id}")
-    public CommentDto patchScheduleComment(@PathVariable Long id, @Valid @RequestBody CommentDto commentDto) {
-        return service.update(id, commentDto);
+    public ResponseEntity<CommentDto> patchScheduleComment(@PathVariable Long id, @Valid @RequestBody CommentUpdateDto commentDto) {
+        return ResponseEntity.ok(service.update(id, commentDto));
     }
 
-
+    // 다건조회
     @GetMapping
-    public List<CommentDto> getScheduleComments() {
-        return service.findAll();
+    public ResponseEntity<List<CommentDto>> getScheduleComments() {
+        return ResponseEntity.ok(service.findAll());
     }
 
+    // 단건조회
     @GetMapping("/{id}")
-    public CommentDto getComment(@PathVariable Long id){
-        return service.findById(id);
+    public ResponseEntity<CommentDto> getComment(@PathVariable Long id){
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @DeleteMapping("/{id}")

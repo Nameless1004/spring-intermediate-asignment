@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.schedule.util;
+package com.sparta.springintermediateasignment.util;
 
 import com.sparta.springintermediateasignment.user.enums.UserRole;
 import io.jsonwebtoken.Claims;

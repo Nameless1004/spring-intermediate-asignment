@@ -1,7 +1,8 @@
 package com.sparta.springintermediateasignment.schedule.controller;
 
-import com.sparta.springintermediateasignment.comment.dto.CommentDto;
-import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -28,33 +29,29 @@ public class ScheduleController {
     private final ScheduleService service;
 
     @GetMapping("/{scheduleId}")
-    public ScheduleDto getSchedule(@PathVariable Long scheduleId) {
-        return service.findById(scheduleId);
+    public ResponseEntity<ScheduleResponseDto> getSchedule(@PathVariable Long scheduleId) {
+        return ResponseEntity.ok(service.getScheduleById(scheduleId));
     }
 
     @GetMapping
-    public List<ScheduleDto> getSchedules(@PageableDefault( size = 10, sort = "updatedAt", direction = Direction.DESC) Pageable pageable) {
-        return service.findAll(pageable);
-    }
-
-    @GetMapping("/{scheduleId}/comments")
-    public List<CommentDto> getComments(@PathVariable Long scheduleId) {
-        return service.findById(scheduleId).getComments();
+    public ResponseEntity<List<ScheduleAllResponseDto>> getSchedules(@PageableDefault( size = 10, sort = "updatedDate", direction = Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(service.getAllSchedule(pageable));
     }
 
     @PostMapping
-    public Long postSchedule(@RequestBody ScheduleDto schedule) {
-        Long id = service.save(schedule);
-        return id;
+    public ResponseEntity<ScheduleResponseDto> postSchedule(@RequestBody ScheduleRequestDto schedule) {
+        Long id = service.saveSchedule(schedule);
+        ScheduleResponseDto scheduleResponseDto = service.getScheduleById(id);
+        return ResponseEntity.ok(scheduleResponseDto);
     }
 
     @PatchMapping("/{id}")
-    public ScheduleDto patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule) {
-        return service.update(id, schedule);
+    public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule) {
+        return ResponseEntity.ok(service.updateSchedule(id, schedule));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> patchSchedule(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

@@ -1,16 +1,18 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
-import com.sparta.springintermediateasignment.schedule.dto.ScheduleDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface ScheduleService {
-    Long save(ScheduleDto scheduleRequestDto);
-    ScheduleDto findById(Long id);
-    ScheduleDto update(Long id, ScheduleUpdateDto scheduleRequestDto);
+    Long saveSchedule(ScheduleRequestDto scheduleRequestDto);
+    ScheduleResponseDto getScheduleById(Long id);
+    ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateDto scheduleRequestDto);
 
-    List<ScheduleDto> findAll(Pageable pageable);
+    List<ScheduleAllResponseDto> getAllSchedule(Pageable pageable);
 
     void delete(Long id);
 }

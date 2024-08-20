@@ -2,6 +2,7 @@ package com.sparta.springintermediateasignment.comment.dto;
 
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CommentDto {
-    private Long id;
+    private Long commentId;
+    @NotNull
     private Long scheduleId;
     @NotBlank
     private String writerName;
@@ -22,12 +24,12 @@ public class CommentDto {
 
     public static CommentDto of(Comment comment) {
         return CommentDto.builder()
-            .id(comment.getId())
+            .commentId(comment.getId())
             .scheduleId(comment.getSchedule().getId())
             .writerName(comment.getName())
             .contents(comment.getContents())
-            .createdAt(comment.getCreatedAt())
-            .updatedAt(comment.getUpdatedAt())
+            .createdAt(comment.getCreatedDate())
+            .updatedAt(comment.getUpdatedDate())
             .build();
     }
 }
