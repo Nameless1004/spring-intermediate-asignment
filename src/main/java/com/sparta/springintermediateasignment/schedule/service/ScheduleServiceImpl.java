@@ -10,6 +10,7 @@ import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
+import com.sparta.springintermediateasignment.util.JwtUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     // private final ScheduleManagerRepository scheduleUserRepository;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     // 저장
     @Override

@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.user.controller;
 
+import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
@@ -68,15 +69,15 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/signuptest")
-    public ResponseEntity<Void> signup(@RequestBody SignupRequestDto requestDto, HttpServletResponse res){
-        service.signup(requestDto, res);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PostMapping("/signup")
+    public ResponseEntity<JwtTokenResponseDto> signup(@RequestBody SignupRequestDto requestDto, HttpServletResponse res){
+        JwtTokenResponseDto token = service.signup(requestDto, res);
+        return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse res){
-        service.login(loginRequestDto, res);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse res){
+        JwtTokenResponseDto token = service.login(loginRequestDto, res);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }

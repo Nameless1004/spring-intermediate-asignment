@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
 import com.sparta.springintermediateasignment.user.filter.ErrorInfo;
 import io.jsonwebtoken.Claims;
@@ -67,20 +68,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // 생성된 JWT를 Cookie에 저장
-    public void addJwtToCookie(String token, HttpServletResponse response) {
-        try{
-            token = URLEncoder.encode(token, "UTF-8").replaceAll("\\+", "%20"); // 공백 변환
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token);
-            cookie.setPath("/");
-
-            // Response 객체에 Cookie 추가
-            response.addCookie(cookie);
-        }catch (UnsupportedEncodingException ex){
-            logger.error(ex.getMessage());
-        }
-    }
-
     // Cookie에 들어있던 JWT 토큰을 Substring
     public String substringToken(String tokenValue){
         if(StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)){
@@ -138,20 +125,15 @@ public class JwtUtil {
         return null;
     }
 
-    // HttpServletRequest 에서 Cookie Value : JWT 가져오기
-    public String getTokenFromRequest2(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
-                    try {
-                        return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
-                    } catch (UnsupportedEncodingException e) {
-                        return null;
-                    }
-                }
-            }
+    public void jwtExceptionHandler(HttpServletResponse response, ErrorInfo errorInfo, Logger logger) {
+        response.setStatus(errorInfo.getHttpStatus().value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        try {
+            String json = new ObjectMapper().writeValueAsString(errorInfo);
+            response.getWriter().write(json);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-        return null;
     }
 }

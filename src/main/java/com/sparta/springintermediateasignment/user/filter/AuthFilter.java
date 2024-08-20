@@ -66,7 +66,7 @@ public class AuthFilter implements Filter {
 
                 // 토큰 검증
                 if (!jwtUtil.validateToken(token, errorInfo)) {
-                    jwtExceptionHandler((HttpServletResponse)response, errorInfo);
+                    jwtUtil.jwtExceptionHandler((HttpServletResponse)response, errorInfo, log);
                     return;
                 }
 
@@ -79,23 +79,8 @@ public class AuthFilter implements Filter {
                 request.setAttribute("user", user);
                 chain.doFilter(request, response); // 다음 Filter 로 이동
             } else {
-                jwtExceptionHandler((HttpServletResponse)response, new ErrorInfo("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST));
+                jwtUtil.jwtExceptionHandler((HttpServletResponse)response, new ErrorInfo("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST), log);
             }
-        }
-
-
-
-    }
-
-    public void jwtExceptionHandler(HttpServletResponse response, ErrorInfo errorInfo) {
-        response.setStatus(errorInfo.getHttpStatus().value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try {
-            String json = new ObjectMapper().writeValueAsString(errorInfo);
-            response.getWriter().write(json);
-        } catch (Exception e) {
-            log.error(e.getMessage());
         }
     }
 

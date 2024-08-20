@@ -3,6 +3,7 @@ package com.sparta.springintermediateasignment.user.service;
 import com.sparta.springintermediateasignment.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
+import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public void signup(SignupRequestDto requestDto, HttpServletResponse res){
+    public JwtTokenResponseDto signup(SignupRequestDto requestDto, HttpServletResponse res){
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -116,27 +117,29 @@ public class UserServiceImpl implements UserService {
         }
 
         // 사용자 권한 확인
-//        UserRole role = UserRole.USER;
-//        if(requestDto.isAdmin()){
-//            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
-//                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
-//            }
-//            role = UserRole.ADMIN;
-//        }
+        UserRole role = UserRole.USER;
+        if(requestDto.isAdmin()){
+            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRole.ADMIN;
+        }
 
         // 사용자 등록 후 jwt 생성 반환
         User user = User.builder()
             .name(requestDto.getUsername())
             .email(requestDto.getEmail())
             .password(password)
+            .role(role)
             .build();
-        String token = jwtUtil.createToken(username, UserRole.USER);
+        String token = jwtUtil.createToken(username, role);
         userRepository.save(user);
-        jwtUtil.addJwtToCookie(token, res);
+
+        return new JwtTokenResponseDto(token);
     }
 
     @Override
-    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+    public JwtTokenResponseDto login(LoginRequestDto requestDto, HttpServletResponse res) {
         String email = requestDto.getEmail();
         String password = passwordEncoder.encode(requestDto.getPassword());
 
@@ -152,18 +155,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 사용자 권한 확인
-//        UserRole role = UserRole.USER;
-//        if(requestDto.isAdmin()){
-//            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
-//                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
-//            }
-//            role = UserRole.ADMIN;
-//        }
+        UserRole role = user.getRole().equals(UserRole.USER) ? UserRole.USER : UserRole.ADMIN;
 
         // 사용자 등록 후 jwt 생성 반환
-        String token = jwtUtil.createToken(user.getName(), UserRole.USER);
+        String token = jwtUtil.createToken(user.getName(), role);
         userRepository.save(user);
-        jwtUtil.addJwtToCookie(token, res);
+        return new JwtTokenResponseDto(token);
     }
 
     private User getUser(Long id) {

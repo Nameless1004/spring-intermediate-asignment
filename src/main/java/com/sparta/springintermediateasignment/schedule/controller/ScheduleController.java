@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,7 +47,7 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule) {
+    public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id, @Valid  @RequestBody ScheduleUpdateDto schedule, @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(service.updateSchedule(id, schedule));
     }
 

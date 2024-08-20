@@ -3,9 +3,12 @@ package com.sparta.springintermediateasignment.user.entity;
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
+import com.sparta.springintermediateasignment.user.enums.UserRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,6 +38,9 @@ public class User extends BaseTimeEntity {
     @Column(name="user_email", nullable = false)
     private String email;
 
+    @Enumerated(value = EnumType.STRING)
+    UserRole role;
+
     // 담당 유저 스케쥴
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduleManager> schedules = new ArrayList<>();
@@ -43,6 +49,7 @@ public class User extends BaseTimeEntity {
         return User.builder()
             .name(dto.getName())
             .email(dto.getEmail())
+            .role(dto.getRole())
             .build();
     }
 }

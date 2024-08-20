@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.user.dto;
 
 import com.sparta.springintermediateasignment.user.entity.User;
+import com.sparta.springintermediateasignment.user.enums.UserRole;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ public class UserDto {
     private Long id;
     private String name;
     private String email;
+    private UserRole role;
     @Setter
     private LocalDateTime createdAt;
     @Setter
@@ -26,6 +28,7 @@ public class UserDto {
             .id(user.getId())
             .name(user.getName())
             .email(user.getEmail())
+            .role(user.getRole())
             .createdAt(user.getCreatedDate())
             .updatedAt(user.getUpdatedDate())
             .build();
