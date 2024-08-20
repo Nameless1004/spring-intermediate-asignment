@@ -3,6 +3,7 @@ package com.sparta.springintermediateasignment.user.service;
 import com.sparta.springintermediateasignment.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
+import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
@@ -130,6 +131,34 @@ public class UserServiceImpl implements UserService {
             .password(requestDto.getPassword())
             .build();
         String token = jwtUtil.createToken(username, UserRole.USER);
+        userRepository.save(user);
+        jwtUtil.addJwtToCookie(token, res);
+    }
+
+    @Override
+    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+        String email = requestDto.getEmail();
+        String password = passwordEncoder.encode(requestDto.getPassword());
+
+        // 회원있는지 확인
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("등록되지 않은 이메일입니다."));
+
+        // 비밀번호 확인
+        if(!user.getPassword().equals(password)){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 사용자 권한 확인
+//        UserRole role = UserRole.USER;
+//        if(requestDto.isAdmin()){
+//            if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
+//                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+//            }
+//            role = UserRole.ADMIN;
+//        }
+
+        // 사용자 등록 후 jwt 생성 반환
+        String token = jwtUtil.createToken(user.getName(), UserRole.USER);
         userRepository.save(user);
         jwtUtil.addJwtToCookie(token, res);
     }

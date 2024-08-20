@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.user.controller;
 
+import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
@@ -71,5 +72,11 @@ public class UserController {
     public ResponseEntity<Void> signup(@RequestBody SignupRequestDto requestDto, HttpServletResponse res){
         service.signup(requestDto, res);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse res){
+        service.login(loginRequestDto, res);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

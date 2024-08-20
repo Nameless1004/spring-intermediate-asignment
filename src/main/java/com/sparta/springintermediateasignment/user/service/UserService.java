@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.user.service;
 
+import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
@@ -23,4 +24,6 @@ public interface UserService {
     void deleteManager(ManagerAddRequestDto userDto);
 
     void signup(SignupRequestDto requestDto, HttpServletResponse res);
+
+    void login(LoginRequestDto loginRequestDto, HttpServletResponse res);
 }
