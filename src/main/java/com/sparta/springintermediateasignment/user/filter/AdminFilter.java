@@ -1,7 +1,7 @@
 package com.sparta.springintermediateasignment.user.filter;
 
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import com.sparta.springintermediateasignment.util.JwtUtil;
+import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

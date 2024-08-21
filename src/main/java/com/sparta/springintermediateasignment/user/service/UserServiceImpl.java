@@ -1,7 +1,7 @@
 package com.sparta.springintermediateasignment.user.service;
 
-import com.sparta.springintermediateasignment.exceptoins.InvalidIdException;
-import com.sparta.springintermediateasignment.exceptoins.PasswordMissmatchException;
+import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
+import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatchException;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
@@ -14,7 +14,7 @@ import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
 import com.sparta.springintermediateasignment.user.repository.ScheduleManagerRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
-import com.sparta.springintermediateasignment.util.JwtUtil;
+import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 @RequiredArgsConstructor

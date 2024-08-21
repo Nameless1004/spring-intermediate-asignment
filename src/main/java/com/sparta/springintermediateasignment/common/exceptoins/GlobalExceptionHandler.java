@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.exceptoins;
+package com.sparta.springintermediateasignment.common.exceptoins;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;

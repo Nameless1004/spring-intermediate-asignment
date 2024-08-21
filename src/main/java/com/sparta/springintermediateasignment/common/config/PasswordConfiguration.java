@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.config;
+package com.sparta.springintermediateasignment.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

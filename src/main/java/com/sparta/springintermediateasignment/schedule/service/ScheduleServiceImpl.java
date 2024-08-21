@@ -11,7 +11,7 @@ import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
-import com.sparta.springintermediateasignment.util.JwtUtil;
+import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.util;
+package com.sparta.springintermediateasignment.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.springintermediateasignment.user.enums.UserRole;

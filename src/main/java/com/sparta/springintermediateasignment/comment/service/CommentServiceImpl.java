@@ -4,7 +4,7 @@ import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import com.sparta.springintermediateasignment.comment.dto.CommentUpdateDto;
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.comment.repository.CommentRepository;
-import com.sparta.springintermediateasignment.exceptoins.InvalidIdException;
+import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import java.util.List;
