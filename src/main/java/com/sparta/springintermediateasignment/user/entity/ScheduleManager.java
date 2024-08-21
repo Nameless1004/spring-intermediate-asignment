@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleManager {
@@ -30,4 +29,16 @@ public class ScheduleManager {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+        schedule.getScheduleManagers()
+            .add(this);
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getSchedulesManagers()
+            .add(this);
+    }
 }

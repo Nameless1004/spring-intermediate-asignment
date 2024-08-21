@@ -28,9 +28,6 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = Comment.of(schedule, commentRequestDto);
         commentRepository.save(comment);
-
-        System.out.println("size = " + schedule.getComments()
-            .size());
         return comment.getId();
     }
 

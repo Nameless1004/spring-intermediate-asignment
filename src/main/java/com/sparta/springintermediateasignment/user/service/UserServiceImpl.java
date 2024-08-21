@@ -82,10 +82,9 @@ public class UserServiceImpl implements UserService {
         Schedule schedule = scheduleRepository.findById(userDto.getScheduleId())
             .orElseThrow(() -> new InvalidIdException("일정"));
 
-        ScheduleManager scheduleManager = ScheduleManager.builder()
-            .user(user)
-            .schedule(schedule)
-            .build();
+        ScheduleManager scheduleManager = new ScheduleManager();
+        scheduleManager.setSchedule(schedule);
+        scheduleManager.setUser(user);
 
         scheduleManagerRepository.save(scheduleManager);
     }

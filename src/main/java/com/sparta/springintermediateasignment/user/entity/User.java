@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.user.entity;
 
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
+import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
 import jakarta.persistence.CascadeType;
@@ -42,9 +43,15 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     UserRole role;
 
-    // 담당 유저 스케쥴
+    // 유저가 작성한 스케쥴
+    // 유저가 삭제되면 작성한 스케쥴도 삭제처리
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ScheduleManager> schedules = new ArrayList<>();
+    private List<Schedule> schedules = new ArrayList<>();
+
+    // 담당 유저 스케쥴
+    // 유저가 삭제되면 담당 스케쥴에서 유저 삭제
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleManager> schedulesManagers = new ArrayList<>();
 
     public static User of(UserDto dto) {
         return User.builder()

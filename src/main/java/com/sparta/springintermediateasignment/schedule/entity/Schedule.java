@@ -56,8 +56,13 @@ public class Schedule extends BaseTimeEntity {
     private final List<ScheduleManager> scheduleManagers = new ArrayList<>();
 
     public Schedule(User user, String todoTitle, String todoContents) {
-        this.user = user;
+        setUser(user);
         this.todoTitle = todoTitle;
         this.todoContents = todoContents;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getSchedules().add(this);
     }
 }

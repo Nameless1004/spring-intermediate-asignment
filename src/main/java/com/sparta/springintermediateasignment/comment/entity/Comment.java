@@ -45,12 +45,20 @@ public class Comment extends BaseTimeEntity {
 
 
     public static Comment of(Schedule schedule, CommentDto dto) {
-        return Comment.builder()
+        Comment comment =  Comment.builder()
             .id(dto.getCommentId())
             .name(dto.getWriterName())
             .contents(dto.getContents())
             .schedule(schedule)
             .build();
+
+        comment.setSchedule(schedule);
+        return comment;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+        schedule.getComments().add(this);
     }
 
 }
