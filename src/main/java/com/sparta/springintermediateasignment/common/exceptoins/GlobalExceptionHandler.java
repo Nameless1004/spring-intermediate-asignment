@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({PasswordMissmatchException.class})
-    public ResponseEntity<String> handlePasswordMissmatchException(PasswordMissmatchException ex) {
+    @ExceptionHandler({InvalidIdException.class, PasswordMissmatchException.class})
+    public ResponseEntity<String> handlePasswordMissmatchException(RuntimeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 

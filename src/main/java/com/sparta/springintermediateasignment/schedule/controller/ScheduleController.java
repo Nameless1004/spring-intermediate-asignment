@@ -42,7 +42,7 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> postSchedule(
-        @RequestBody ScheduleRequestDto schedule) {
+        @Valid @RequestBody ScheduleRequestDto schedule) {
         Long id = service.saveSchedule(schedule);
         ScheduleResponseDto scheduleResponseDto = service.getScheduleById(id);
         return ResponseEntity.ok(scheduleResponseDto);

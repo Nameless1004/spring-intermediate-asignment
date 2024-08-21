@@ -7,6 +7,7 @@ import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class UserController {
     private final UserServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> saveUser(@Valid @RequestBody UserDto userDto) {
         Long id = service.save(userDto);
         UserDto created = service.findById(id);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
         return new ResponseEntity<>(service.update(id, userDto), HttpStatus.OK);
     }
 
@@ -58,7 +59,7 @@ public class UserController {
 
     // 일정 담당자 등록
     @PostMapping("/schedules")
-    public ResponseEntity<Void> addScheduleManager(@RequestBody ManagerAddRequestDto userDto) {
+    public ResponseEntity<Void> addScheduleManager(@Valid @RequestBody ManagerAddRequestDto userDto) {
         service.addManager(userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .build();
@@ -66,14 +67,14 @@ public class UserController {
 
     // 일정 담당자 삭제
     @DeleteMapping("/schedules")
-    public ResponseEntity<Void> deleteScheduleManager(@RequestBody ManagerAddRequestDto userDto) {
+    public ResponseEntity<Void> deleteScheduleManager(@Valid @RequestBody ManagerAddRequestDto userDto) {
         service.deleteManager(userDto);
         return ResponseEntity.ok()
             .build();
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtTokenResponseDto> signup(@RequestBody SignupRequestDto requestDto,
+    public ResponseEntity<JwtTokenResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto,
         HttpServletResponse res) {
         JwtTokenResponseDto token = service.signup(requestDto, res);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenResponseDto> login(@RequestBody LoginRequestDto loginRequestDto,
+    public ResponseEntity<JwtTokenResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
         HttpServletResponse res) {
         JwtTokenResponseDto token = service.login(loginRequestDto, res);
         return ResponseEntity.status(HttpStatus.OK)

@@ -2,6 +2,9 @@ package com.sparta.springintermediateasignment.user.dto;
 
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +17,11 @@ import lombok.Setter;
 public class UserDto {
 
     private Long id;
+    @NotBlank
     private String name;
+    @Email
     private String email;
+    @NotNull
     private UserRole role;
     @Setter
     private LocalDateTime createdAt;
