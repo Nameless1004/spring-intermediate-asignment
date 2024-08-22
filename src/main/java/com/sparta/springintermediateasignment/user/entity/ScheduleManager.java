@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ScheduleManager {
 
@@ -30,15 +31,22 @@ public class ScheduleManager {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    public static ScheduleManager createScheduleManager(Schedule schedule, User user) {
+        ScheduleManager manager = new ScheduleManager();
+        manager.setSchedule(schedule);
+        manager.setUser(user);
+        return manager;
+    }
+
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
-        schedule.getScheduleManagers()
+        this.schedule.getScheduleManagers()
             .add(this);
     }
 
     public void setUser(User user) {
         this.user = user;
-        user.getSchedulesManagers()
+        this.user.getSchedulesManagers()
             .add(this);
     }
 }

@@ -1,7 +1,9 @@
 package com.sparta.springintermediateasignment.schedule.entity;
 
+import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.user.entity.ScheduleManager;
 import com.sparta.springintermediateasignment.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -17,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +27,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Table(name = "schedule")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule extends BaseTimeEntity {
 
     @Id
@@ -51,18 +54,33 @@ public class Schedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> comments = new ArrayList<>();
 
-    // 담당 유저 조회
+    // 담당 유저
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<ScheduleManager> scheduleManagers = new ArrayList<>();
 
-    public Schedule(User user, String todoTitle, String todoContents) {
-        setUser(user);
-        this.todoTitle = todoTitle;
-        this.todoContents = todoContents;
+    public static Schedule createSchedule(User user, String todoTitle, String todoContents, String weather) {
+        Schedule schedule = new Schedule();
+        schedule.setUser(user);
+        schedule.setTodoTitle(todoTitle);
+        schedule.setTodoContents(todoContents);
+        schedule.setWeather(weather);
+        return schedule;
     }
 
     public void setUser(User user) {
         this.user = user;
         user.getSchedules().add(this);
+    }
+
+    public Long getUserId(){
+        return user.getId();
+    }
+
+    public List<CommentDto> getCommentList(){
+        return comments.stream().map(CommentDto::createCommentDto).toList();
+    }
+
+    public List<ScheduleManagerInfoDto> getManagerList(){
+        return scheduleManagers.stream().map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(scheduleManager.getUser())).toList();
     }
 }

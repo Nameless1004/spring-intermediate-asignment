@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ManagerAddRequestDto {
-
+    @NotNull
+    private Long authorUserId;
     @NotNull
     private Long scheduleId;
     @NotNull

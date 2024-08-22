@@ -23,7 +23,7 @@ public class CommentDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static CommentDto of(Comment comment) {
+    public static CommentDto createCommentDto(Comment comment) {
         return CommentDto.builder()
             .commentId(comment.getId())
             .scheduleId(comment.getSchedule()

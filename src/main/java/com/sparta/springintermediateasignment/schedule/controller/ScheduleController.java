@@ -4,7 +4,12 @@ import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDt
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
+import com.sparta.springintermediateasignment.schedule.entity.Schedule;
+import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.schedule.service.ScheduleService;
+import com.sparta.springintermediateasignment.user.dto.UserDto;
+import com.sparta.springintermediateasignment.user.entity.User;
+import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +63,7 @@ public class ScheduleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
         service.delete(id);
+
         return ResponseEntity.ok()
             .build();
     }

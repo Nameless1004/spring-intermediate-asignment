@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
 
@@ -53,11 +54,12 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduleManager> schedulesManagers = new ArrayList<>();
 
-    public static User of(UserDto dto) {
+    public static User createUser(UserDto dto) {
         return User.builder()
             .name(dto.getName())
             .email(dto.getEmail())
             .role(dto.getRole())
             .build();
     }
+
 }
