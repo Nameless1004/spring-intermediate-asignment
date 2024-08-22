@@ -72,14 +72,14 @@ public class UserController {
             .build();
     }
 
-    @PostMapping("/signup")
+    @GetMapping("/signup")
     public ResponseEntity<JwtTokenResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         JwtTokenResponseDto token = service.join(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(token);
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public ResponseEntity<JwtTokenResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         JwtTokenResponseDto token = service.login(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK)
