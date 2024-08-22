@@ -41,7 +41,7 @@ public class CommentService {
     public CommentDto updateComment(Long commentId, CommentUpdateDto commentRequestDto) {
         Comment comment = findCommentInRepository(commentId);
 
-        comment.setContents(commentRequestDto.getContents());
+        comment.update(commentRequestDto.getContents());
 
         return CommentDto.createCommentDto(comment);
     }

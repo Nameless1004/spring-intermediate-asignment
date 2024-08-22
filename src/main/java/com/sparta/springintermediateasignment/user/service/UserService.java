@@ -1,5 +1,6 @@
 package com.sparta.springintermediateasignment.user.service;
 
+import com.sparta.springintermediateasignment.common.config.PasswordEncoder;
 import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatchException;
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
@@ -18,7 +19,6 @@ import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
-    private final ScheduleUserRepository scheduleManagerRepository;
+    private final ScheduleUserRepository scheduleUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -81,7 +81,7 @@ public class UserService {
         }
 
         // 해당 스케쥴 담당자 중복 체크
-        Optional<ScheduleUser> find = scheduleManagerRepository.findByUserIdAndScheduleId(
+        Optional<ScheduleUser> find = scheduleUserRepository.findByUserIdAndScheduleId(
             requestDto.getUserId(), requestDto.getScheduleId());
         if (find.isPresent()) {
             throw new IllegalArgumentException(
@@ -96,7 +96,7 @@ public class UserService {
 
     @Transactional(readOnly = false)
     public void deleteManager(AddScheduleManagerDto requestDto) {
-        ScheduleUser del = scheduleManagerRepository.findByUserId(requestDto.getUserId())
+        ScheduleUser del = scheduleUserRepository.findByUserId(requestDto.getUserId())
             .orElseThrow(
                 () -> new InvalidIdException("일정 담당자 레포지토리", "매니저", requestDto.getUserId()));
 
@@ -111,7 +111,7 @@ public class UserService {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
 
-        scheduleManagerRepository.delete(del);
+        scheduleUserRepository.delete(del);
     }
 
     /**

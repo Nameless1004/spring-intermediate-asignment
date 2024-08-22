@@ -39,15 +39,12 @@ public class Schedule extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Setter
     @Column(name = "todo_title", nullable = false)
     private String todoTitle;
 
-    @Setter
     @Column(name = "todo_contents", nullable = false)
     private String todoContents;
 
-    @Setter
     private String weather;
 
     // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
@@ -62,9 +59,9 @@ public class Schedule extends BaseTimeEntity {
         String weather) {
         Schedule schedule = new Schedule();
         schedule.setUser(user);
-        schedule.setTodoTitle(todoTitle);
-        schedule.setTodoContents(todoContents);
-        schedule.setWeather(weather);
+        schedule.todoTitle = todoTitle;
+        schedule.todoContents = todoContents;
+        schedule.weather = weather;
         return schedule;
     }
 
@@ -72,6 +69,11 @@ public class Schedule extends BaseTimeEntity {
         this.user = user;
         user.getSchedules()
             .add(this);
+    }
+
+    public void update(String title, String contents){
+        this.todoTitle = title;
+        this.todoContents = contents;
     }
 
     public Long getUserId() {

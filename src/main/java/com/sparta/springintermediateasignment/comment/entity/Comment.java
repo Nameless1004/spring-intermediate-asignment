@@ -31,7 +31,6 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Setter
     @Column(name = "author_name", nullable = false)
     private String name;
 
@@ -39,7 +38,6 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    @Setter
     @Column(name = "comment_contents", nullable = false)
     private String contents;
 
@@ -61,6 +59,10 @@ public class Comment extends BaseTimeEntity {
         this.schedule = schedule;
         schedule.getComments()
             .add(this);
+    }
+
+    public void update(String contents) {
+        this.contents = contents;
     }
 
 }
