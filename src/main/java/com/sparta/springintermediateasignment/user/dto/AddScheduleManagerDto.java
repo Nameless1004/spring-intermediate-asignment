@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class AddManagerRequestDto {
+public class AddScheduleManagerDto {
 
     @NotNull
     private Long authorUserId;

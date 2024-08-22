@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ScheduleManager {
+public class ScheduleUser {
 
     @Id
     @GeneratedValue
@@ -30,8 +30,8 @@ public class ScheduleManager {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public static ScheduleManager createScheduleManager(Schedule schedule, User user) {
-        ScheduleManager manager = new ScheduleManager();
+    public static ScheduleUser createScheduleManager(Schedule schedule, User user) {
+        ScheduleUser manager = new ScheduleUser();
         manager.setSchedule(schedule);
         manager.setUser(user);
         return manager;

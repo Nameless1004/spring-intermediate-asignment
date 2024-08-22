@@ -5,15 +5,15 @@ import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatc
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
-import com.sparta.springintermediateasignment.user.dto.AddManagerRequestDto;
+import com.sparta.springintermediateasignment.user.dto.AddScheduleManagerDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
-import com.sparta.springintermediateasignment.user.entity.ScheduleManager;
+import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import com.sparta.springintermediateasignment.user.repository.ScheduleManagerRepository;
+import com.sparta.springintermediateasignment.user.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -29,21 +29,21 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
-    private final ScheduleManagerRepository scheduleManagerRepository;
+    private final ScheduleUserRepository scheduleManagerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional(readOnly = false)
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         User user = getUser(id);
 
         userRepository.delete(user);
     }
 
     @Transactional(readOnly = false)
-    public UserDto update(Long id, UserDto userDto) {
+    public UserDto updateUser(Long id, UserDto userDto) {
         User user = getUser(id);
 
         // 수정
@@ -51,7 +51,7 @@ public class UserService {
         return userDto;
     }
 
-    public List<UserDto> findAll() {
+    public List<UserDto> findUsers() {
         return userRepository.findAll()
             .stream()
             .map(UserDto::of)
@@ -68,7 +68,7 @@ public class UserService {
      * @param requestDto
      */
     @Transactional(readOnly = false)
-    public void addManager(AddManagerRequestDto requestDto) {
+    public void addManager(AddScheduleManagerDto requestDto) {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
             .orElseThrow(
                 () -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
@@ -81,7 +81,7 @@ public class UserService {
         }
 
         // 해당 스케쥴 담당자 중복 체크
-        Optional<ScheduleManager> find = scheduleManagerRepository.findByUserIdAndScheduleId(
+        Optional<ScheduleUser> find = scheduleManagerRepository.findByUserIdAndScheduleId(
             requestDto.getUserId(), requestDto.getScheduleId());
         if (find.isPresent()) {
             throw new IllegalArgumentException(
@@ -91,12 +91,12 @@ public class UserService {
 
         User user = getUser(requestDto.getUserId());
 
-        ScheduleManager.createScheduleManager(schedule, user);
+        ScheduleUser.createScheduleManager(schedule, user);
     }
 
     @Transactional(readOnly = false)
-    public void deleteManager(AddManagerRequestDto requestDto) {
-        ScheduleManager del = scheduleManagerRepository.findByUserId(requestDto.getUserId())
+    public void deleteManager(AddScheduleManagerDto requestDto) {
+        ScheduleUser del = scheduleManagerRepository.findByUserId(requestDto.getUserId())
             .orElseThrow(
                 () -> new InvalidIdException("일정 담당자 레포지토리", "매니저", requestDto.getUserId()));
 

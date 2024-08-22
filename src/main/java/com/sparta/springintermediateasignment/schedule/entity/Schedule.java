@@ -4,7 +4,7 @@ import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
-import com.sparta.springintermediateasignment.user.entity.ScheduleManager;
+import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,7 +56,7 @@ public class Schedule extends BaseTimeEntity {
 
     // 담당 유저
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ScheduleManager> scheduleManagers = new ArrayList<>();
+    private final List<ScheduleUser> scheduleManagers = new ArrayList<>();
 
     public static Schedule createSchedule(User user, String todoTitle, String todoContents,
         String weather) {
