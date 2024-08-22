@@ -75,7 +75,7 @@ public class UserController {
             .build();
     }
 
-    @GetMapping("/signup")
+    @PostMapping("/signup")
     public ResponseEntity<JwtTokenResponseDto> signup(
         @Valid @RequestBody SignupRequestDto requestDto) {
         JwtTokenResponseDto token = service.join(requestDto);

@@ -17,7 +17,7 @@ public class CommentDto {
     @NotNull
     private Long scheduleId;
     @NotBlank
-    private String writerName;
+    private String authorName;
     @NotBlank
     private String contents;
     private LocalDateTime createdAt;
@@ -28,7 +28,7 @@ public class CommentDto {
             .commentId(comment.getId())
             .scheduleId(comment.getSchedule()
                 .getId())
-            .writerName(comment.getName())
+            .authorName(comment.getName())
             .contents(comment.getContents())
             .createdAt(comment.getCreatedDate())
             .updatedAt(comment.getUpdatedDate())

@@ -6,6 +6,7 @@ import com.sparta.springintermediateasignment.comment.service.CommentService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,7 @@ public class CommentController {
         @Valid @RequestBody CommentDto commentDto) {
         Long id = service.saveComment(commentDto);
         CommentDto dto = service.findOne(id);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PatchMapping("/{id}")

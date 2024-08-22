@@ -32,7 +32,7 @@ public class Comment extends BaseTimeEntity {
     private Long id;
 
     @Setter
-    @Column(name = "writer_name", nullable = false)
+    @Column(name = "author_name", nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +48,7 @@ public class Comment extends BaseTimeEntity {
     public static Comment createComment(Schedule schedule, CommentDto dto) {
         Comment comment = Comment.builder()
             .id(dto.getCommentId())
-            .name(dto.getWriterName())
+            .name(dto.getAuthorName())
             .contents(dto.getContents())
             .schedule(schedule)
             .build();
