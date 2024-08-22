@@ -26,7 +26,8 @@ public class CommentService {
     @Transactional(readOnly = false)
     public Long saveComment(CommentDto commentRequestDto) {
         Schedule schedule = scheduleRepository.findById(commentRequestDto.getScheduleId())
-            .orElseThrow(() -> new InvalidIdException("일정 레포지토리", "일정", commentRequestDto.getScheduleId()));
+            .orElseThrow(
+                () -> new InvalidIdException("일정 레포지토리", "일정", commentRequestDto.getScheduleId()));
 
         Comment comment = Comment.createComment(schedule, commentRequestDto);
         commentRepository.save(comment);
@@ -63,7 +64,7 @@ public class CommentService {
     }
 
     /**
-     * 댓글 다건 조회 
+     * 댓글 다건 조회
      */
     public List<CommentDto> findComments() {
         return commentRepository.findAll()
@@ -73,7 +74,8 @@ public class CommentService {
     }
 
     /**
-     *  CommentId가 유효한지 검사
+     * CommentId가 유효한지 검사
+     *
      * @return id가 존재하면 엔티티 반환
      * @throws InvalidIdException
      */

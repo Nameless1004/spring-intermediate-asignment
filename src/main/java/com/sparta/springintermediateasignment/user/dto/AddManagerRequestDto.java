@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class ManagerAddRequestDto {
+public class AddManagerRequestDto {
+
     @NotNull
     private Long authorUserId;
     @NotNull
     private Long scheduleId;
     @NotNull
-    private Long managerId;
+    private Long userId;
 }

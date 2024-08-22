@@ -2,7 +2,6 @@ package com.sparta.springintermediateasignment.schedule.dto;
 
 
 import com.sparta.springintermediateasignment.comment.dto.CommentDto;
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

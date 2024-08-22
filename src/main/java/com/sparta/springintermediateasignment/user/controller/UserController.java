@@ -1,12 +1,11 @@
 package com.sparta.springintermediateasignment.user.controller;
 
+import com.sparta.springintermediateasignment.user.dto.AddManagerRequestDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
-import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,8 @@ public class UserController {
     private final UserService service;
 
     @PostMapping
-    public ResponseEntity<JwtTokenResponseDto> saveUser(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<JwtTokenResponseDto> saveUser(
+        @Valid @RequestBody SignupRequestDto requestDto) {
         JwtTokenResponseDto response = service.join(requestDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -45,7 +45,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> patchUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> patchUser(@PathVariable Long id,
+        @Valid @RequestBody UserDto userDto) {
         return new ResponseEntity<>(service.update(id, userDto), HttpStatus.OK);
     }
 
@@ -58,7 +59,8 @@ public class UserController {
 
     // 일정 담당자 등록
     @PostMapping("/schedules")
-    public ResponseEntity<Void> addScheduleManager(@Valid @RequestBody ManagerAddRequestDto userDto) {
+    public ResponseEntity<Void> addScheduleManager(
+        @Valid @RequestBody AddManagerRequestDto userDto) {
         service.addManager(userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .build();
@@ -66,21 +68,24 @@ public class UserController {
 
     // 일정 담당자 삭제
     @DeleteMapping("/schedules")
-    public ResponseEntity<Void> deleteScheduleManager(@Valid @RequestBody ManagerAddRequestDto userDto) {
+    public ResponseEntity<Void> deleteScheduleManager(
+        @Valid @RequestBody AddManagerRequestDto userDto) {
         service.deleteManager(userDto);
         return ResponseEntity.ok()
             .build();
     }
 
     @GetMapping("/signup")
-    public ResponseEntity<JwtTokenResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<JwtTokenResponseDto> signup(
+        @Valid @RequestBody SignupRequestDto requestDto) {
         JwtTokenResponseDto token = service.join(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(token);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<JwtTokenResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<JwtTokenResponseDto> login(
+        @Valid @RequestBody LoginRequestDto loginRequestDto) {
         JwtTokenResponseDto token = service.login(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK)
             .body(token);

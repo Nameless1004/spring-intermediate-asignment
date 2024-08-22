@@ -5,9 +5,9 @@ import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatc
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
+import com.sparta.springintermediateasignment.user.dto.AddManagerRequestDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
-import com.sparta.springintermediateasignment.user.dto.ManagerAddRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.entity.ScheduleManager;
@@ -68,41 +68,46 @@ public class UserService {
      * @param requestDto
      */
     @Transactional(readOnly = false)
-    public void addManager(ManagerAddRequestDto requestDto) {
-        // 해당 스케쥴 담당자 중복 체크
-        Optional<ScheduleManager> find = scheduleManagerRepository.findByUserIdAndScheduleId(
-            requestDto.getManagerId(), requestDto.getScheduleId());
-        if (find.isPresent()) {
-            throw new IllegalArgumentException(
-                "이미 등록된 담당자입니다. 스케쥴id: " + requestDto.getScheduleId() + " / 담당자 id: "
-                    + requestDto.getManagerId());
-        }
-
+    public void addManager(AddManagerRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
-            .orElseThrow(() -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
+            .orElseThrow(
+                () -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getUserId().equals(authorUserId)) {
+        if (!schedule.getUserId()
+            .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
 
-        User user = getUser(requestDto.getManagerId());
+        // 해당 스케쥴 담당자 중복 체크
+        Optional<ScheduleManager> find = scheduleManagerRepository.findByUserIdAndScheduleId(
+            requestDto.getUserId(), requestDto.getScheduleId());
+        if (find.isPresent()) {
+            throw new IllegalArgumentException(
+                "이미 등록된 담당자입니다. 스케쥴id: " + requestDto.getScheduleId() + " / 담당자 id: "
+                    + requestDto.getUserId());
+        }
+
+        User user = getUser(requestDto.getUserId());
 
         ScheduleManager.createScheduleManager(schedule, user);
     }
 
     @Transactional(readOnly = false)
-    public void deleteManager(ManagerAddRequestDto requestDto) {
-        ScheduleManager del = scheduleManagerRepository.findByUserId(requestDto.getManagerId())
-            .orElseThrow(() -> new InvalidIdException("일정 담당자 레포지토리", "매니저", requestDto.getManagerId()));
+    public void deleteManager(AddManagerRequestDto requestDto) {
+        ScheduleManager del = scheduleManagerRepository.findByUserId(requestDto.getUserId())
+            .orElseThrow(
+                () -> new InvalidIdException("일정 담당자 레포지토리", "매니저", requestDto.getUserId()));
 
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
-            .orElseThrow(() -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
+            .orElseThrow(
+                () -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getUserId().equals(authorUserId)) {
+        if (!schedule.getUserId()
+            .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
 

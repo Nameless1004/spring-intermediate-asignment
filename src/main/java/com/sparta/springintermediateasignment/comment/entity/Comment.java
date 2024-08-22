@@ -46,7 +46,7 @@ public class Comment extends BaseTimeEntity {
 
     // 생성 메서드
     public static Comment createComment(Schedule schedule, CommentDto dto) {
-        Comment comment =  Comment.builder()
+        Comment comment = Comment.builder()
             .id(dto.getCommentId())
             .name(dto.getWriterName())
             .contents(dto.getContents())
@@ -59,7 +59,8 @@ public class Comment extends BaseTimeEntity {
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
-        schedule.getComments().add(this);
+        schedule.getComments()
+            .add(this);
     }
 
 }

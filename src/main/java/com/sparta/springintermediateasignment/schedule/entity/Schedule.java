@@ -58,7 +58,8 @@ public class Schedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<ScheduleManager> scheduleManagers = new ArrayList<>();
 
-    public static Schedule createSchedule(User user, String todoTitle, String todoContents, String weather) {
+    public static Schedule createSchedule(User user, String todoTitle, String todoContents,
+        String weather) {
         Schedule schedule = new Schedule();
         schedule.setUser(user);
         schedule.setTodoTitle(todoTitle);
@@ -69,18 +70,24 @@ public class Schedule extends BaseTimeEntity {
 
     public void setUser(User user) {
         this.user = user;
-        user.getSchedules().add(this);
+        user.getSchedules()
+            .add(this);
     }
 
-    public Long getUserId(){
+    public Long getUserId() {
         return user.getId();
     }
 
-    public List<CommentDto> getCommentList(){
-        return comments.stream().map(CommentDto::createCommentDto).toList();
+    public List<CommentDto> getCommentList() {
+        return comments.stream()
+            .map(CommentDto::createCommentDto)
+            .toList();
     }
 
-    public List<ScheduleManagerInfoDto> getManagerList(){
-        return scheduleManagers.stream().map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(scheduleManager.getUser())).toList();
+    public List<ScheduleManagerInfoDto> getManagerList() {
+        return scheduleManagers.stream()
+            .map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(
+                scheduleManager.getUser()))
+            .toList();
     }
 }
