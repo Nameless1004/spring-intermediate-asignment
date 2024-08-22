@@ -22,7 +22,6 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -80,13 +79,13 @@ public class Schedule extends BaseTimeEntity {
         return user.getId();
     }
 
-    public List<CommentDto> getCommentList() {
+    public List<CommentDto> getCommentsDto() {
         return comments.stream()
             .map(CommentDto::createCommentDto)
             .toList();
     }
 
-    public List<ScheduleManagerInfoDto> getManagerList() {
+    public List<ScheduleManagerInfoDto> getManagersDto() {
         return scheduleManagers.stream()
             .map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(
                 scheduleManager.getUser()))

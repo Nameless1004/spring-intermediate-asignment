@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
@@ -38,7 +38,6 @@ public class ScheduleService {
     /**
      * 일정 등록
      */
-    @Transactional(readOnly = false)
     public Long saveSchedule(ScheduleRequestDto scheduleRequestDto) {
         // 작성 유저 정보 가져오기
         User user = userRepository.findById(scheduleRequestDto.getUserId())
@@ -68,6 +67,7 @@ public class ScheduleService {
     /**
      * 일정 단건 조회
      */
+    @Transactional(readOnly = true)
     public ScheduleResponseDto getScheduleById(Long id) {
         Schedule schedule = getSchedule(id);
 
@@ -78,14 +78,15 @@ public class ScheduleService {
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
             .updatedAt(schedule.getUpdatedDate())
-            .commentList(schedule.getCommentList())
-            .managerList(schedule.getManagerList())
+            .commentList(schedule.getCommentsDto())
+            .managerList(schedule.getManagersDto())
             .build();
     }
 
     /**
      * 일정다건 조회
      */
+    @Transactional(readOnly = true)
     public List<ScheduleAllResponseDto> getAllSchedule(Pageable pageable) {
         Page<Schedule> schedules = scheduleRepository.findAll(pageable);
 
@@ -99,7 +100,7 @@ public class ScheduleService {
                 .scheduleContents(schedule.getTodoContents())
                 .createdAt(schedule.getCreatedDate())
                 .updatedAt(schedule.getUpdatedDate())
-                .commentList(schedule.getCommentList())
+                .commentList(schedule.getCommentsDto())
                 .build();
 
             result.add(responseDto);
@@ -112,7 +113,6 @@ public class ScheduleService {
     /**
      * 일정 업데이트
      */
-    @Transactional(readOnly = false)
     public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateDto scheduleRequestDto) {
         Schedule schedule = getSchedule(id);
 
@@ -125,14 +125,13 @@ public class ScheduleService {
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
             .updatedAt(schedule.getUpdatedDate())
-            .commentList(schedule.getCommentList())
+            .commentList(schedule.getCommentsDto())
             .build();
     }
 
     /**
      * 일정 삭제 일정 삭제 시 해당 schedule_manager테이블에서 해당 일정, 해당 일정에 달린 댓글 제거
      */
-    @Transactional(readOnly = false)
     public void delete(Long id) {
         // 같은 영속성 컨텍스트 내에서 user에 schedule list를 건드릴 일이 없으면 유저의 일정 리스트에서 일정을 삭제하지 않아도
         // Commit이 될 때 알아서 유저의 일정 리스트에서 삭제된다.

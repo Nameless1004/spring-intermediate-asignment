@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -23,7 +23,6 @@ public class CommentService {
     /**
      * 댓글 등록
      */
-    @Transactional(readOnly = false)
     public Long saveComment(CommentDto commentRequestDto) {
         Schedule schedule = scheduleRepository.findById(commentRequestDto.getScheduleId())
             .orElseThrow(
@@ -37,7 +36,6 @@ public class CommentService {
     /**
      * 댓글 업데이트
      */
-    @Transactional(readOnly = false)
     public CommentDto updateComment(Long commentId, CommentUpdateDto commentRequestDto) {
         Comment comment = findCommentInRepository(commentId);
 
@@ -49,7 +47,6 @@ public class CommentService {
     /**
      * 댓글 삭제
      */
-    @Transactional(readOnly = false)
     public void deleteComment(Long commentId) {
         Comment comment = findCommentInRepository(commentId);
         commentRepository.delete(comment);
@@ -58,6 +55,7 @@ public class CommentService {
     /**
      * 댓글 단건 조회
      */
+    @Transactional(readOnly = true)
     public CommentDto findOne(Long commentId) {
         Comment comment = findCommentInRepository(commentId);
         return CommentDto.createCommentDto(comment);
@@ -66,6 +64,7 @@ public class CommentService {
     /**
      * 댓글 다건 조회
      */
+    @Transactional(readOnly = true)
     public List<CommentDto> findComments() {
         return commentRepository.findAll()
             .stream()

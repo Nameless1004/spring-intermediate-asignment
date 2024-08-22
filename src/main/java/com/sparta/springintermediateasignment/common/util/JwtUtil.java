@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -103,7 +104,6 @@ public class JwtUtil {
             errorInfo.setHttpStatus(HttpStatus.BAD_REQUEST);
             logger.error("JWT claims string is empty, 잘못된 JWT 토큰 입니다.");
         }
-
         return false;
     }
 

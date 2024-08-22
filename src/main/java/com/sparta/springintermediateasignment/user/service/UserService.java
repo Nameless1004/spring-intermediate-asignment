@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -35,14 +35,12 @@ public class UserService {
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    @Transactional(readOnly = false)
     public void deleteUser(Long id) {
         User user = getUser(id);
 
         userRepository.delete(user);
     }
 
-    @Transactional(readOnly = false)
     public UserDto updateUser(Long id, UserDto userDto) {
         User user = getUser(id);
 
@@ -51,6 +49,7 @@ public class UserService {
         return userDto;
     }
 
+    @Transactional(readOnly = true)
     public List<UserDto> findUsers() {
         return userRepository.findAll()
             .stream()
@@ -58,6 +57,7 @@ public class UserService {
             .toList();
     }
 
+    @Transactional(readOnly = true)
     public UserDto findById(Long id) {
         return UserDto.of(getUser(id));
     }
@@ -67,7 +67,6 @@ public class UserService {
      *
      * @param requestDto
      */
-    @Transactional(readOnly = false)
     public void addManager(AddScheduleManagerDto requestDto) {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
             .orElseThrow(
@@ -94,7 +93,10 @@ public class UserService {
         ScheduleUser.createScheduleManager(schedule, user);
     }
 
-    @Transactional(readOnly = false)
+    /**
+     * 담당 매니저 삭제
+     * @param requestDto
+     */
     public void deleteManager(AddScheduleManagerDto requestDto) {
         ScheduleUser del = scheduleUserRepository.findByUserId(requestDto.getUserId())
             .orElseThrow(
@@ -120,7 +122,6 @@ public class UserService {
      * @param requestDto
      * @return jwt토큰 반환
      */
-    @Transactional(readOnly = false)
     public JwtTokenResponseDto join(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -156,9 +157,9 @@ public class UserService {
 
     /**
      * 로그인
-     *
      * @return jwt 토큰 반환
      */
+    @Transactional(readOnly = true)
     public JwtTokenResponseDto login(LoginRequestDto requestDto) {
         String email = requestDto.getEmail();
         // 회원있는지 확인
