@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.user.entity;
 
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,30 +23,18 @@ public class ScheduleUser {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
+    @Column(name = "user_id")
+    private Long userId;
 
-    public static ScheduleUser createScheduleManager(Schedule schedule, User user) {
+    @Column(name = "schedule_id")
+    private Long scheduleId;
+
+    public static ScheduleUser createScheduleManager(Long scheduleId, Long userId) {
         ScheduleUser manager = new ScheduleUser();
-        manager.setSchedule(schedule);
-        manager.setUser(user);
+        manager.scheduleId = scheduleId;
+        manager.userId = userId;
         return manager;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-        this.schedule.getScheduleManagers()
-            .add(this);
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        this.user.getSchedulesManagers()
-            .add(this);
-    }
 }

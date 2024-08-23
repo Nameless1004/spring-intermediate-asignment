@@ -34,9 +34,8 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "schedule_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "todo_title", nullable = false)
     private String todoTitle;
@@ -46,49 +45,20 @@ public class Schedule extends BaseTimeEntity {
 
     private String weather;
 
-    // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Comment> comments = new ArrayList<>();
 
-    // 담당 유저
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ScheduleUser> scheduleManagers = new ArrayList<>();
-
-    public static Schedule createSchedule(User user, String todoTitle, String todoContents,
+    public static Schedule createSchedule(Long userId, String todoTitle, String todoContents,
         String weather) {
         Schedule schedule = new Schedule();
-        schedule.setUser(user);
+        schedule.userId = userId;
         schedule.todoTitle = todoTitle;
         schedule.todoContents = todoContents;
         schedule.weather = weather;
         return schedule;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-        user.getSchedules()
-            .add(this);
-    }
 
     public void update(String title, String contents){
         this.todoTitle = title;
         this.todoContents = contents;
-    }
-
-    public Long getUserId() {
-        return user.getId();
-    }
-
-    public List<CommentDto> getCommentsDto() {
-        return comments.stream()
-            .map(CommentDto::createCommentDto)
-            .toList();
-    }
-
-    public List<ScheduleManagerInfoDto> getManagersDto() {
-        return scheduleManagers.stream()
-            .map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(
-                scheduleManager.getUser()))
-            .toList();
     }
 }

@@ -34,31 +34,23 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "author_name", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
 
     @Column(name = "comment_contents", nullable = false)
     private String contents;
 
 
     // 생성 메서드
-    public static Comment createComment(Schedule schedule, CommentDto dto) {
+    public static Comment createComment(Long scheduleId, CommentDto dto) {
         Comment comment = Comment.builder()
             .id(dto.getCommentId())
             .name(dto.getAuthorName())
             .contents(dto.getContents())
-            .schedule(schedule)
+            .scheduleId(scheduleId)
             .build();
 
-        comment.setSchedule(schedule);
         return comment;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-        schedule.getComments()
-            .add(this);
     }
 
     public void update(String contents) {

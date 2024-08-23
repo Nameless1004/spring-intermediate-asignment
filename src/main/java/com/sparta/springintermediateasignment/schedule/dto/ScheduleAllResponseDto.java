@@ -19,6 +19,4 @@ public class ScheduleAllResponseDto {
     private String scheduleContents;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    private List<CommentDto> commentList;
 }

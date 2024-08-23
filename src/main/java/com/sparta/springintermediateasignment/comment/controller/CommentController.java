@@ -36,7 +36,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CommentDto> patchScheduleComment(@PathVariable Long id,
+    public ResponseEntity<CommentDto> patchScheduleComment(@PathVariable("id") Long id,
         @Valid @RequestBody CommentUpdateDto commentDto) {
         return ResponseEntity.ok(service.updateComment(id, commentDto));
     }
@@ -49,12 +49,12 @@ public class CommentController {
 
     // 단건조회
     @GetMapping("/{id}")
-    public ResponseEntity<CommentDto> getComment(@PathVariable Long id) {
+    public ResponseEntity<CommentDto> getComment(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.findOne(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable("id") Long id) {
         service.deleteComment(id);
         return ResponseEntity.ok()
             .build();

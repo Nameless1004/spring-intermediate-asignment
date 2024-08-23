@@ -38,6 +38,7 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = getUser(id);
 
+        scheduleUserRepository.deleteByUserId(id);
         userRepository.delete(user);
     }
 
@@ -90,7 +91,9 @@ public class UserService {
 
         User user = getUser(requestDto.getUserId());
 
-        ScheduleUser.createScheduleManager(schedule, user);
+        ScheduleUser su = ScheduleUser.createScheduleManager(schedule.getId(),
+            user.getId());
+        scheduleUserRepository.save(su);
     }
 
     /**
@@ -149,7 +152,7 @@ public class UserService {
             .password(password)
             .role(role)
             .build();
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(user.getEmail(), role);
         userRepository.save(user);
 
         return new JwtTokenResponseDto(token);

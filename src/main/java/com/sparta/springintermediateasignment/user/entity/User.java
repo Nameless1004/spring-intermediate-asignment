@@ -44,15 +44,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     UserRole role;
 
-    // 유저가 작성한 스케쥴
-    @OneToMany(mappedBy = "user")
-    private List<Schedule> schedules = new ArrayList<>();
-
-    // 담당 유저 스케쥴
-    // 유저가 삭제되면 담당 스케쥴에서 유저 삭제
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ScheduleUser> schedulesManagers = new ArrayList<>();
-
     public static User createUser(UserDto dto) {
         return User.builder()
             .name(dto.getName())

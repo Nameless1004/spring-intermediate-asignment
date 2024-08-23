@@ -1,13 +1,18 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
+import com.sparta.springintermediateasignment.comment.repository.CommentRepository;
+import com.sparta.springintermediateasignment.comment.service.CommentService;
+import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.schedule.dto.DateDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.entity.User;
+import com.sparta.springintermediateasignment.user.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,9 +33,12 @@ import org.springframework.web.client.RestTemplate;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleUserRepository scheduleUserRepository;
+    private final CommentService commentService;
     private final UserRepository userRepository;
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final CommentRepository commentRepository;
 
     // 날씨 캐싱용
     Map<String, String> weatherByDate = new HashMap<>();
@@ -58,7 +66,7 @@ public class ScheduleService {
         String date = LocalDateTime.now()
             .format(DateTimeFormatter.ofPattern("MM-dd"));
 
-        Schedule schedule = Schedule.createSchedule(user, scheduleRequestDto.getTodoTitle(),
+        Schedule schedule = Schedule.createSchedule(user.getId(), scheduleRequestDto.getTodoTitle(),
             scheduleRequestDto.getTodoContents(), weatherByDate.get(date));
         scheduleRepository.save(schedule);
         return schedule.getId();
@@ -69,7 +77,13 @@ public class ScheduleService {
      */
     @Transactional(readOnly = true)
     public ScheduleResponseDto getScheduleById(Long id) {
-        Schedule schedule = getSchedule(id);
+        Schedule schedule = scheduleRepository.findById(id)
+            .orElseThrow(() -> new InvalidIdException("일정 레포지토리", "일정", id));
+
+        List<User> findUsers = scheduleUserRepository.findUsersByScheduleId(id);
+        List<ScheduleManagerInfoDto> managers = findUsers.stream()
+            .map(user -> new ScheduleManagerInfoDto(user.getId(), user.getName(), user.getEmail()))
+            .toList();
 
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
@@ -78,8 +92,7 @@ public class ScheduleService {
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
             .updatedAt(schedule.getUpdatedDate())
-            .commentList(schedule.getCommentsDto())
-            .managerList(schedule.getManagersDto())
+            .managaers(managers)
             .build();
     }
 
@@ -100,7 +113,6 @@ public class ScheduleService {
                 .scheduleContents(schedule.getTodoContents())
                 .createdAt(schedule.getCreatedDate())
                 .updatedAt(schedule.getUpdatedDate())
-                .commentList(schedule.getCommentsDto())
                 .build();
 
             result.add(responseDto);
@@ -124,7 +136,6 @@ public class ScheduleService {
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
             .updatedAt(schedule.getUpdatedDate())
-            .commentList(schedule.getCommentsDto())
             .build();
     }
 
@@ -135,6 +146,8 @@ public class ScheduleService {
         // 같은 영속성 컨텍스트 내에서 user에 schedule list를 건드릴 일이 없으면 유저의 일정 리스트에서 일정을 삭제하지 않아도
         // Commit이 될 때 알아서 유저의 일정 리스트에서 삭제된다.
         Schedule schedule = getSchedule(id);
+        commentRepository.deleteAllByScheduleId(schedule.getId());
+        scheduleUserRepository.deleteByScheduleId(schedule.getId());
         scheduleRepository.delete(schedule);
     }
 

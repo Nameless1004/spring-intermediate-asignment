@@ -4,13 +4,17 @@ import com.sparta.springintermediateasignment.comment.entity.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Data
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentDto {
 
     private Long commentId;
@@ -26,8 +30,7 @@ public class CommentDto {
     public static CommentDto createCommentDto(Comment comment) {
         return CommentDto.builder()
             .commentId(comment.getId())
-            .scheduleId(comment.getSchedule()
-                .getId())
+            .scheduleId(comment.getScheduleId())
             .authorName(comment.getName())
             .contents(comment.getContents())
             .createdAt(comment.getCreatedDate())
