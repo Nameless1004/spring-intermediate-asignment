@@ -45,8 +45,7 @@ public class User extends BaseTimeEntity {
     UserRole role;
 
     // 유저가 작성한 스케쥴
-    // 유저가 삭제되면 작성한 스케쥴도 삭제처리
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<Schedule> schedules = new ArrayList<>();
 
     // 담당 유저 스케쥴

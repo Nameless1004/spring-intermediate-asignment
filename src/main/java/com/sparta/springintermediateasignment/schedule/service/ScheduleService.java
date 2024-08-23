@@ -115,7 +115,6 @@ public class ScheduleService {
      */
     public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateDto scheduleRequestDto) {
         Schedule schedule = getSchedule(id);
-
         schedule.update(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents());
 
         return ScheduleResponseDto.builder()

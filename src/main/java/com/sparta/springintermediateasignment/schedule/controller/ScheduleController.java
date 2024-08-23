@@ -50,8 +50,7 @@ public class ScheduleController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> patchSchedule(@PathVariable Long id,
-        @Valid @RequestBody ScheduleUpdateDto schedule,
-        @RequestHeader("Authorization") String token) {
+        @Valid @RequestBody ScheduleUpdateDto schedule) {
         return ResponseEntity.ok(service.updateSchedule(id, schedule));
     }
 
