@@ -30,7 +30,7 @@ public class ScheduleController {
     private final ScheduleService service;
 
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponseDto> getSchedule(@PathVariable Long scheduleId) {
+    public ResponseEntity<ScheduleResponseDto> getSchedule(@PathVariable("scheduleId") Long scheduleId) {
         return ResponseEntity.ok(service.getScheduleById(scheduleId));
     }
 
@@ -55,7 +55,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id) {
         service.delete(id);
 
         return ResponseEntity.ok()
