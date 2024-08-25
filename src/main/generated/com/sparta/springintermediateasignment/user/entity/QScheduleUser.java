@@ -19,7 +19,6 @@ public class QScheduleUser extends EntityPathBase<ScheduleUser> {
     private static final long serialVersionUID = -1303975096L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QScheduleUser scheduleUser = new QScheduleUser("scheduleUser");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

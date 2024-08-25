@@ -27,7 +27,6 @@ public class QSchedule extends EntityPathBase<Schedule> {
     public final com.sparta.springintermediateasignment.user.entity.QUser author;
 
     public final ListPath<com.sparta.springintermediateasignment.comment.entity.Comment, com.sparta.springintermediateasignment.comment.entity.QComment> comments = this.<com.sparta.springintermediateasignment.comment.entity.Comment, com.sparta.springintermediateasignment.comment.entity.QComment>createList("comments", com.sparta.springintermediateasignment.comment.entity.Comment.class, com.sparta.springintermediateasignment.comment.entity.QComment.class, PathInits.DIRECT2);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
