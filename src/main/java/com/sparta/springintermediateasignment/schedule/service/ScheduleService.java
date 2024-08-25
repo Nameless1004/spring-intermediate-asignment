@@ -141,9 +141,13 @@ public class ScheduleService {
      * 일정 삭제 일정 삭제 시 해당 schedule_manager테이블에서 해당 일정, 해당 일정에 달린 댓글 제거
      */
     public void delete(Long id) {
-        // 같은 영속성 컨텍스트 내에서 user에 schedule list를 건드릴 일이 없으면 유저의 일정 리스트에서 일정을 삭제하지 않아도
-        // Commit이 될 때 알아서 유저의 일정 리스트에서 삭제된다.
         Schedule schedule = getSchedule(id);
+
+        // 작성자의 작성 일정 목록에서 해당 일정 제거
+        User author = schedule.getAuthor();
+        author.removeSchedule(schedule);
+
+        // 일정 삭제 시 담당자가 있다면 삭제 안됨
         scheduleRepository.delete(schedule);
     }
 

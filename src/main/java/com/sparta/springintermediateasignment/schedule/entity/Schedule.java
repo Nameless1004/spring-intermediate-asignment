@@ -44,10 +44,12 @@ public class Schedule extends BaseTimeEntity {
 
     private String weather;
 
-    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    // 댓글은 일정에 종속되기 때문에 같이 삭제 처리해준다.
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    // 조인 테이블은 Cascase X
+    @OneToMany(mappedBy = "schedule")
     private List<ScheduleUser> managedUser = new ArrayList<>();
 
     public static Schedule createSchedule(User author, String todoTitle, String todoContents,

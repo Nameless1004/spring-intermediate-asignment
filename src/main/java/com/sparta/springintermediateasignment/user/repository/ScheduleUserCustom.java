@@ -8,5 +8,7 @@ import java.util.Optional;
 
 public interface ScheduleUserCustom {
      List<ScheduleManagerInfoDto> findUsersByScheduleId(Long scheduleId);
-     Optional<ScheduleUser> findByUserIdAndScheduleId(Long userId, Long scheduleId);;
+     Optional<ScheduleUser> findByUserIdAndScheduleId(Long userId, Long scheduleId);
+     void deleteAllByScheduleId(Long scheduleId);
+     void deleteAllByUserId(Long userId);
 }

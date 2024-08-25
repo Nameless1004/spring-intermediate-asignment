@@ -52,4 +52,16 @@ public class ScheduleUserCustomImpl  implements ScheduleUserCustom {
         if(scheduleUser == null) return Optional.empty();
         return Optional.of(scheduleUser);
     }
+
+    @Override
+    public void deleteAllByScheduleId(Long scheduleId) {
+        QScheduleUser su = QScheduleUser.scheduleUser;
+        query.delete(su).where(su.schedule.id.eq(scheduleId)).execute();
+    }
+
+    @Override
+    public void deleteAllByUserId(Long userId) {
+        QScheduleUser su = QScheduleUser.scheduleUser;
+        query.delete(su).where(su.user.id.eq(userId)).execute();
+    }
 }

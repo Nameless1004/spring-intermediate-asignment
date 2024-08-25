@@ -38,6 +38,8 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = getUser(id);
 
+        // 유저 삭제 시 유저가 작성한 일정이 있으면 삭제 안됨
+        // 유저 삭제 시 담당하고 있는 일정이 있으면 삭제 안됨
         userRepository.delete(user);
     }
 

@@ -44,10 +44,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     UserRole role;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author")
     private List<Schedule> createdSchedules = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
     private List<ScheduleUser> managedSchedules = new ArrayList<>();
 
     public static User createUser(UserDto dto) {
