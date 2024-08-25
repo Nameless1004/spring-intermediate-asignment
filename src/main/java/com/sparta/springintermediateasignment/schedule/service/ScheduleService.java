@@ -82,10 +82,10 @@ public class ScheduleService {
 
         List<ScheduleManagerInfoDto> managers = scheduleUserRepository.findUsersByScheduleId(id);
 
-
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getAuthor().getId())
+            .userId(schedule.getAuthor()
+                .getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
@@ -106,7 +106,8 @@ public class ScheduleService {
         for (Schedule schedule : schedules) {
             ScheduleAllResponseDto responseDto = ScheduleAllResponseDto.builder()
                 .scheduleId(schedule.getId())
-                .userId(schedule.getAuthor().getId())
+                .userId(schedule.getAuthor()
+                    .getId())
                 .scheduleTitle(schedule.getTodoTitle())
                 .scheduleContents(schedule.getTodoContents())
                 .createdAt(schedule.getCreatedDate())
@@ -129,7 +130,8 @@ public class ScheduleService {
 
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getAuthor().getId())
+            .userId(schedule.getAuthor()
+                .getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())

@@ -1,7 +1,6 @@
 package com.sparta.springintermediateasignment.schedule.dto;
 
 import com.sparta.springintermediateasignment.user.entity.User;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

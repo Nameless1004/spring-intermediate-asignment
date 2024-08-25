@@ -4,7 +4,6 @@ import com.sparta.springintermediateasignment.common.BaseTimeEntity;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -62,15 +61,15 @@ public class User extends BaseTimeEntity {
         managedSchedules.add(scheduleUser);
     }
 
-    public void removeManagedSchedule(ScheduleUser scheduleUser){
+    public void removeManagedSchedule(ScheduleUser scheduleUser) {
         managedSchedules.remove(scheduleUser);
     }
 
-    public void addSchedule(Schedule schedule){
+    public void addSchedule(Schedule schedule) {
         createdSchedules.add(schedule);
     }
 
-    public void removeSchedule(Schedule schedule){
+    public void removeSchedule(Schedule schedule) {
         createdSchedules.remove(schedule);
     }
 }

@@ -65,7 +65,7 @@ public class Schedule extends BaseTimeEntity {
     }
 
 
-    public void update(String title, String contents){
+    public void update(String title, String contents) {
         this.todoTitle = title;
         this.todoContents = contents;
     }
@@ -74,7 +74,7 @@ public class Schedule extends BaseTimeEntity {
         managedUser.remove(scheduleUser);
     }
 
-    public void addManager(ScheduleUser scheduleUser){
+    public void addManager(ScheduleUser scheduleUser) {
         managedUser.add(scheduleUser);
     }
 }

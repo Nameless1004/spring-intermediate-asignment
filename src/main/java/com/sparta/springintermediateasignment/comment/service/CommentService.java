@@ -74,7 +74,9 @@ public class CommentService {
 
     public List<CommentDto> findCommentsByScheduleId(Long scheduleId) {
         return commentRepository.findByScheduleId(scheduleId)
-            .stream().map(CommentDto::createCommentDto).toList();
+            .stream()
+            .map(CommentDto::createCommentDto)
+            .toList();
     }
 
     /**

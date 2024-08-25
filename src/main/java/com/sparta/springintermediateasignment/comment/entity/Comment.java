@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -51,7 +50,8 @@ public class Comment extends BaseTimeEntity {
             .schedule(schedule)
             .build();
 
-        schedule.getComments().add(comment);
+        schedule.getComments()
+            .add(comment);
         return comment;
     }
 

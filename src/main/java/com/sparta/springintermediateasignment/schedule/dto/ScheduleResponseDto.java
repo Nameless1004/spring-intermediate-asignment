@@ -1,7 +1,5 @@
 package com.sparta.springintermediateasignment.schedule.dto;
 
-import com.sparta.springintermediateasignment.comment.dto.CommentDto;
-import java.lang.annotation.Documented;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;

@@ -76,7 +76,8 @@ public class UserService {
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getAuthor().getId()
+        if (!schedule.getAuthor()
+            .getId()
             .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
@@ -98,17 +99,22 @@ public class UserService {
 
     /**
      * 담당 매니저 삭제
+     *
      * @param requestDto
      */
     public void deleteManager(AddScheduleManagerDto requestDto) {
-        ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(requestDto.getUserId(), requestDto.getScheduleId())
+        ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(
+                requestDto.getUserId(), requestDto.getScheduleId())
             .orElseThrow(
-                () -> new IllegalArgumentException("해당 일정에" +"[ "+ requestDto.getScheduleId() +" ]" + "해당하는 해당 유저"+ "[ "+ requestDto.getUserId() +" ]" + "가 없습니다."));
+                () -> new IllegalArgumentException(
+                    "해당 일정에" + "[ " + requestDto.getScheduleId() + " ]" + "해당하는 해당 유저" + "[ "
+                        + requestDto.getUserId() + " ]" + "가 없습니다."));
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
         Schedule schedule = scheduleUser.getSchedule();
-        if (!schedule.getAuthor().getId()
+        if (!schedule.getAuthor()
+            .getId()
             .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
@@ -158,6 +164,7 @@ public class UserService {
 
     /**
      * 로그인
+     *
      * @return jwt 토큰 반환
      */
     @Transactional(readOnly = true)

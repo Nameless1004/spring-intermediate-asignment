@@ -30,7 +30,8 @@ public class CommentDto {
     public static CommentDto createCommentDto(Comment comment) {
         return CommentDto.builder()
             .commentId(comment.getId())
-            .scheduleId(comment.getSchedule().getId())
+            .scheduleId(comment.getSchedule()
+                .getId())
             .authorName(comment.getName())
             .contents(comment.getContents())
             .createdAt(comment.getCreatedDate())

@@ -6,5 +6,4 @@ import java.util.List;
 public interface CommentCustom {
 
     List<Comment> findByScheduleId(Long scheduleId);
-    void deleteAllByScheduleId(Long scheduleId);
 }

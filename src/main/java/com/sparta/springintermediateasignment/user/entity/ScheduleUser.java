@@ -1,7 +1,6 @@
 package com.sparta.springintermediateasignment.user.entity;
 
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +40,7 @@ public class ScheduleUser {
         return manager;
     }
 
-    public void removeScheduleUser(){
+    public void removeScheduleUser() {
         this.user.removeManagedSchedule(this);
         this.schedule.removeManager(this);
     }
