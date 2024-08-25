@@ -18,24 +18,25 @@ public class ScheduleCustomImpl implements ScheduleCustom {
 
     @Override
     public List<Comment> findCommentsByScheduleId(Long scheduleId) {
-        QComment comment = QComment.comment;
-        QSchedule schedule = QSchedule.schedule;
-
-        List<Tuple> fetch = queryFactory.select(comment.id, comment.scheduleId,
-                comment.name, comment.contents)
-            .from(comment)
-            .join(schedule)
-            .on(comment.scheduleId.eq(schedule.id))
-            .where(comment.scheduleId.eq(scheduleId))
-            .orderBy(comment.updatedDate.desc())
-            .fetchJoin()// 레이지 로딩 되지 않게
-            .fetch();
-
-        return fetch.stream().map(tupple-> Comment.builder().
-            id(tupple.get(comment.id))
-            .scheduleId(tupple.get(comment.scheduleId))
-            .name(tupple.get(comment.name))
-            .contents(tupple.get(comment.contents))
-            .build()).toList();
+//        QComment comment = QComment.comment;
+//        QSchedule schedule = QSchedule.schedule;
+//
+//        List<Tuple> fetch = queryFactory.select(comment.id, comment.schedule.id.as("schedule_id"),
+//                comment.name, comment.contents)
+//            .from(comment)
+//            .join(schedule)
+//            .on(comment.scheduleId.eq(schedule.id))
+//            .where(comment.scheduleId.eq(scheduleId))
+//            .orderBy(comment.updatedDate.desc())
+//            .fetchJoin()// 레이지 로딩 되지 않게
+//            .fetch();
+//
+//        return fetch.stream().map(tupple-> Comment.builder().
+//            id(tupple.get(comment.id))
+//            .scheduleId(tupple.get(comment.scheduleId))
+//            .name(tupple.get(comment.name))
+//            .contents(tupple.get(comment.contents))
+//            .build()).toList();
+        return null;
     }
 }

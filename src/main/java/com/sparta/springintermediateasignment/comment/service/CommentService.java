@@ -28,7 +28,7 @@ public class CommentService {
             .orElseThrow(
                 () -> new InvalidIdException("일정 레포지토리", "일정", commentRequestDto.getScheduleId()));
 
-        Comment comment = Comment.createComment(schedule.getId(), commentRequestDto);
+        Comment comment = Comment.createComment(schedule, commentRequestDto);
         commentRepository.save(comment);
         return comment.getId();
     }

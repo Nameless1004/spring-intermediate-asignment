@@ -24,17 +24,26 @@ public class ScheduleUser {
     private Long id;
 
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "schedule_id")
-    private Long scheduleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
-    public static ScheduleUser createScheduleManager(Long scheduleId, Long userId) {
+    public static ScheduleUser createScheduleManager(Schedule schedule, User user) {
         ScheduleUser manager = new ScheduleUser();
-        manager.scheduleId = scheduleId;
-        manager.userId = userId;
+        manager.schedule = schedule;
+        manager.user = user;
+        user.addManagedSchedule(manager);
+        schedule.addManager(manager);
         return manager;
+    }
+
+    public void removeScheduleUser(){
+        this.user.removeManagedSchedule(this);
+        this.schedule.removeManager(this);
     }
 
 }

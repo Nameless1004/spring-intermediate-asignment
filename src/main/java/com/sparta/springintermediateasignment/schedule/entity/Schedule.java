@@ -1,9 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.entity;
 
-import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
-import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -34,8 +32,9 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "schedule_id")
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User author;
 
     @Column(name = "todo_title", nullable = false)
     private String todoTitle;
@@ -45,14 +44,21 @@ public class Schedule extends BaseTimeEntity {
 
     private String weather;
 
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    public static Schedule createSchedule(Long userId, String todoTitle, String todoContents,
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleUser> managedUser = new ArrayList<>();
+
+    public static Schedule createSchedule(User author, String todoTitle, String todoContents,
         String weather) {
         Schedule schedule = new Schedule();
-        schedule.userId = userId;
+        schedule.author = author;
         schedule.todoTitle = todoTitle;
         schedule.todoContents = todoContents;
         schedule.weather = weather;
+
+        author.addSchedule(schedule);
         return schedule;
     }
 
@@ -60,5 +66,13 @@ public class Schedule extends BaseTimeEntity {
     public void update(String title, String contents){
         this.todoTitle = title;
         this.todoContents = contents;
+    }
+
+    public void removeManager(ScheduleUser scheduleUser) {
+        managedUser.remove(scheduleUser);
+    }
+
+    public void addManager(ScheduleUser scheduleUser){
+        managedUser.add(scheduleUser);
     }
 }

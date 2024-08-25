@@ -16,7 +16,7 @@ public class CommentCustomImpl implements CommentCustom {
         QComment c = QComment.comment;
         List<Comment> result = query.select(c)
             .from(c)
-            .where(c.scheduleId.eq(scheduleId))
+            .where(c.schedule.id.eq(scheduleId))
             .fetch();
         return result;
     }
@@ -25,6 +25,6 @@ public class CommentCustomImpl implements CommentCustom {
     public void deleteAllByScheduleId(Long scheduleId) {
         QComment c = QComment.comment;
         query.delete(c)
-            .where(c.scheduleId.eq(scheduleId)).execute();
+            .where(c.schedule.id.eq(scheduleId)).execute();
     }
 }

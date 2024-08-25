@@ -66,7 +66,7 @@ public class ScheduleService {
         String date = LocalDateTime.now()
             .format(DateTimeFormatter.ofPattern("MM-dd"));
 
-        Schedule schedule = Schedule.createSchedule(user.getId(), scheduleRequestDto.getTodoTitle(),
+        Schedule schedule = Schedule.createSchedule(user, scheduleRequestDto.getTodoTitle(),
             scheduleRequestDto.getTodoContents(), weatherByDate.get(date));
         scheduleRepository.save(schedule);
         return schedule.getId();
@@ -80,14 +80,12 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(id)
             .orElseThrow(() -> new InvalidIdException("일정 레포지토리", "일정", id));
 
-        List<User> findUsers = scheduleUserRepository.findUsersByScheduleId(id);
-        List<ScheduleManagerInfoDto> managers = findUsers.stream()
-            .map(user -> new ScheduleManagerInfoDto(user.getId(), user.getName(), user.getEmail()))
-            .toList();
+        List<ScheduleManagerInfoDto> managers = scheduleUserRepository.findUsersByScheduleId(id);
+
 
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getUserId())
+            .userId(schedule.getAuthor().getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
@@ -108,7 +106,7 @@ public class ScheduleService {
         for (Schedule schedule : schedules) {
             ScheduleAllResponseDto responseDto = ScheduleAllResponseDto.builder()
                 .scheduleId(schedule.getId())
-                .userId(schedule.getUserId())
+                .userId(schedule.getAuthor().getId())
                 .scheduleTitle(schedule.getTodoTitle())
                 .scheduleContents(schedule.getTodoContents())
                 .createdAt(schedule.getCreatedDate())
@@ -131,7 +129,7 @@ public class ScheduleService {
 
         return ScheduleResponseDto.builder()
             .scheduleId(schedule.getId())
-            .userId(schedule.getUserId())
+            .userId(schedule.getAuthor().getId())
             .scheduleTitle(schedule.getTodoTitle())
             .scheduleContents(schedule.getTodoContents())
             .createdAt(schedule.getCreatedDate())
@@ -146,8 +144,6 @@ public class ScheduleService {
         // 같은 영속성 컨텍스트 내에서 user에 schedule list를 건드릴 일이 없으면 유저의 일정 리스트에서 일정을 삭제하지 않아도
         // Commit이 될 때 알아서 유저의 일정 리스트에서 삭제된다.
         Schedule schedule = getSchedule(id);
-        commentRepository.deleteAllByScheduleId(schedule.getId());
-        scheduleUserRepository.deleteByScheduleId(schedule.getId());
         scheduleRepository.delete(schedule);
     }
 

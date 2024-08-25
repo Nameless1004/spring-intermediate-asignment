@@ -44,6 +44,12 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     UserRole role;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> createdSchedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleUser> managedSchedules = new ArrayList<>();
+
     public static User createUser(UserDto dto) {
         return User.builder()
             .name(dto.getName())
@@ -52,4 +58,19 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
+    public void addManagedSchedule(ScheduleUser scheduleUser) {
+        managedSchedules.add(scheduleUser);
+    }
+
+    public void removeManagedSchedule(ScheduleUser scheduleUser){
+        managedSchedules.remove(scheduleUser);
+    }
+
+    public void addSchedule(Schedule schedule){
+        createdSchedules.add(schedule);
+    }
+
+    public void removeSchedule(Schedule schedule){
+        createdSchedules.remove(schedule);
+    }
 }

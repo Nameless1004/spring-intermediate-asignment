@@ -1,12 +1,18 @@
 package com.sparta.springintermediateasignment.user.repository;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.util.CollectionUtils;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.schedule.entity.QSchedule;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.entity.QScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.QUser;
+import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +23,33 @@ public class ScheduleUserCustomImpl  implements ScheduleUserCustom {
     JPAQueryFactory query;
 
     @Override
-    public List<User> findUsersByScheduleId(Long scheduleId) {
+    public List<ScheduleManagerInfoDto> findUsersByScheduleId(Long scheduleId) {
         QScheduleUser su = QScheduleUser.scheduleUser;
-        QSchedule s = QSchedule.schedule;
         QUser u = QUser.user;
-        return query.select(u)
-            .from(u)
-            .leftJoin(su)
-            .on(u.id.eq(su.userId))
-            .where(su.scheduleId.eq(scheduleId))
-            .fetchJoin()
+        List<Long> ids = query.select(su.user.id)
+            .from(su)
+            .where(su.schedule.id.eq(scheduleId)).fetch();
+        if(ids.isEmpty()){
+            return new ArrayList<>();
+        }
+
+        return query.select(Projections.fields(ScheduleManagerInfoDto.class,
+            u.id,
+            u.name,
+            u.email
+            )).from(u)
+            .where(u.id.in(ids))
             .fetch();
     }
 
     @Override
-    public void deleteByScheduleId(Long scheduleId) {
+    public Optional<ScheduleUser> findByUserIdAndScheduleId(Long userId, Long scheduleId) {
         QScheduleUser su = QScheduleUser.scheduleUser;
-        query.delete(su).where(su.scheduleId.eq(scheduleId)).execute();
-    }
-
-    @Override
-    public void deleteByUserId(Long userId) {
-        QScheduleUser su = QScheduleUser.scheduleUser;
-        query.delete(su).where(su.userId.eq(userId)).execute();
+        ScheduleUser scheduleUser = query.select(su)
+            .from(su)
+            .where(su.user.id.eq(userId).and(su.schedule.id.eq(scheduleId)))
+            .fetchOne();
+        if(scheduleUser == null) return Optional.empty();
+        return Optional.of(scheduleUser);
     }
 }

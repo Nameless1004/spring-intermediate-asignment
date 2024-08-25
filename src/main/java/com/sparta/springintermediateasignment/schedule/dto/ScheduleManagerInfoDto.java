@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ScheduleManagerInfoDto {
 
     private Long id;
