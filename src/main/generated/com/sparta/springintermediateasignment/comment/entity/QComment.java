@@ -18,7 +18,6 @@ public class QComment extends EntityPathBase<Comment> {
 
     private static final long serialVersionUID = -1953894207L;
 
-
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QComment comment = new QComment("comment");
