@@ -72,6 +72,13 @@ public class CommentService {
             .toList();
     }
 
+    public List<CommentDto> findCommentsByScheduleId(Long scheduleId) {
+        return commentRepository.findByScheduleId(scheduleId)
+            .stream()
+            .map(CommentDto::createCommentDto)
+            .toList();
+    }
+
     /**
      * CommentId가 유효한지 검사
      *

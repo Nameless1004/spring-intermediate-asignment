@@ -38,6 +38,8 @@ public class UserService {
     public void deleteUser(Long id) {
         User user = getUser(id);
 
+        // 유저 삭제 시 유저가 작성한 일정이 있으면 삭제 안됨
+        // 유저 삭제 시 담당하고 있는 일정이 있으면 삭제 안됨
         userRepository.delete(user);
     }
 
@@ -74,7 +76,8 @@ public class UserService {
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getUserId()
+        if (!schedule.getAuthor()
+            .getId()
             .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
@@ -90,30 +93,34 @@ public class UserService {
 
         User user = getUser(requestDto.getUserId());
 
-        ScheduleUser.createScheduleManager(schedule, user);
+        ScheduleUser su = ScheduleUser.createScheduleManager(schedule, user);
+        scheduleUserRepository.save(su);
     }
 
     /**
      * 담당 매니저 삭제
+     *
      * @param requestDto
      */
     public void deleteManager(AddScheduleManagerDto requestDto) {
-        ScheduleUser del = scheduleUserRepository.findByUserId(requestDto.getUserId())
+        ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(
+                requestDto.getUserId(), requestDto.getScheduleId())
             .orElseThrow(
-                () -> new InvalidIdException("일정 담당자 레포지토리", "매니저", requestDto.getUserId()));
-
-        Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
-            .orElseThrow(
-                () -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
+                () -> new IllegalArgumentException(
+                    "해당 일정에" + "[ " + requestDto.getScheduleId() + " ]" + "해당하는 해당 유저" + "[ "
+                        + requestDto.getUserId() + " ]" + "가 없습니다."));
 
         // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
         Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getUserId()
+        Schedule schedule = scheduleUser.getSchedule();
+        if (!schedule.getAuthor()
+            .getId()
             .equals(authorUserId)) {
             throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
         }
 
-        scheduleUserRepository.delete(del);
+        scheduleUser.removeScheduleUser();
+        scheduleUserRepository.delete(scheduleUser);
     }
 
     /**
@@ -149,7 +156,7 @@ public class UserService {
             .password(password)
             .role(role)
             .build();
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(user.getEmail(), role);
         userRepository.save(user);
 
         return new JwtTokenResponseDto(token);
@@ -157,6 +164,7 @@ public class UserService {
 
     /**
      * 로그인
+     *
      * @return jwt 토큰 반환
      */
     @Transactional(readOnly = true)

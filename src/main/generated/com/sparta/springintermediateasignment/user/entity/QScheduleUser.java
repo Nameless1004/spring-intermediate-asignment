@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,24 +18,35 @@ public class QScheduleUser extends EntityPathBase<ScheduleUser> {
 
     private static final long serialVersionUID = -1303975096L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
     public static final QScheduleUser scheduleUser = new QScheduleUser("scheduleUser");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> scheduleId = createNumber("scheduleId", Long.class);
+    public final com.sparta.springintermediateasignment.schedule.entity.QSchedule schedule;
 
-    public final NumberPath<Long> userId = createNumber("userId", Long.class);
+    public final QUser user;
 
     public QScheduleUser(String variable) {
-        super(ScheduleUser.class, forVariable(variable));
+        this(ScheduleUser.class, forVariable(variable), INITS);
     }
 
     public QScheduleUser(Path<? extends ScheduleUser> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QScheduleUser(PathMetadata metadata) {
-        super(ScheduleUser.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QScheduleUser(PathMetadata metadata, PathInits inits) {
+        this(ScheduleUser.class, metadata, inits);
+    }
+
+    public QScheduleUser(Class<? extends ScheduleUser> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.schedule = inits.isInitialized("schedule") ? new com.sparta.springintermediateasignment.schedule.entity.QSchedule(forProperty("schedule"), inits.get("schedule")) : null;
+        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 
 }

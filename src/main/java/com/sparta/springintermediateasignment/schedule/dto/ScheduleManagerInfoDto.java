@@ -1,7 +1,6 @@
 package com.sparta.springintermediateasignment.schedule.dto;
 
 import com.sparta.springintermediateasignment.user.entity.User;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ScheduleManagerInfoDto {
 
     private Long id;

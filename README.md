@@ -47,3 +47,6 @@
 # ERD
 
 ![](./images/erd.png)
+
+# 도커
+docker pull nameless1004/spring-boot-app:1.0

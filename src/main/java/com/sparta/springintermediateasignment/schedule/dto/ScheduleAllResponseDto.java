@@ -1,9 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.dto;
 
 
-import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -19,6 +17,4 @@ public class ScheduleAllResponseDto {
     private String scheduleContents;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    private List<CommentDto> commentList;
 }

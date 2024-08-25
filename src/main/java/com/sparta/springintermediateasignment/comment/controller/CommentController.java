@@ -32,7 +32,8 @@ public class CommentController {
         @Valid @RequestBody CommentDto commentDto) {
         Long id = service.saveComment(commentDto);
         CommentDto dto = service.findOne(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(dto);
     }
 
     @PatchMapping("/{id}")

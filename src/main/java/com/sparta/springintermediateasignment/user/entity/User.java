@@ -4,7 +4,6 @@ import com.sparta.springintermediateasignment.common.BaseTimeEntity;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -44,14 +43,11 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     UserRole role;
 
-    // 유저가 작성한 스케쥴
-    @OneToMany(mappedBy = "user")
-    private List<Schedule> schedules = new ArrayList<>();
+    @OneToMany(mappedBy = "author")
+    private List<Schedule> createdSchedules = new ArrayList<>();
 
-    // 담당 유저 스케쥴
-    // 유저가 삭제되면 담당 스케쥴에서 유저 삭제
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ScheduleUser> schedulesManagers = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<ScheduleUser> managedSchedules = new ArrayList<>();
 
     public static User createUser(UserDto dto) {
         return User.builder()
@@ -61,4 +57,19 @@ public class User extends BaseTimeEntity {
             .build();
     }
 
+    public void addManagedSchedule(ScheduleUser scheduleUser) {
+        managedSchedules.add(scheduleUser);
+    }
+
+    public void removeManagedSchedule(ScheduleUser scheduleUser) {
+        managedSchedules.remove(scheduleUser);
+    }
+
+    public void addSchedule(Schedule schedule) {
+        createdSchedules.add(schedule);
+    }
+
+    public void removeSchedule(Schedule schedule) {
+        createdSchedules.remove(schedule);
+    }
 }

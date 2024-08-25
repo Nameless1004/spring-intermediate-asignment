@@ -1,9 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.entity;
 
-import com.sparta.springintermediateasignment.comment.dto.CommentDto;
 import com.sparta.springintermediateasignment.comment.entity.Comment;
 import com.sparta.springintermediateasignment.common.BaseTimeEntity;
-import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -36,7 +34,7 @@ public class Schedule extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User author;
 
     @Column(name = "todo_title", nullable = false)
     private String todoTitle;
@@ -46,49 +44,37 @@ public class Schedule extends BaseTimeEntity {
 
     private String weather;
 
-    // 부모 삭제되면 자식(Comment)도 같이 삭제되게 처리
+    // 댓글은 일정에 종속되기 때문에 같이 삭제 처리해준다.
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
-    // 담당 유저
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<ScheduleUser> scheduleManagers = new ArrayList<>();
+    // 조인 테이블은 Cascase X
+    @OneToMany(mappedBy = "schedule")
+    private List<ScheduleUser> managedUser = new ArrayList<>();
 
-    public static Schedule createSchedule(User user, String todoTitle, String todoContents,
+    public static Schedule createSchedule(User author, String todoTitle, String todoContents,
         String weather) {
         Schedule schedule = new Schedule();
-        schedule.setUser(user);
+        schedule.author = author;
         schedule.todoTitle = todoTitle;
         schedule.todoContents = todoContents;
         schedule.weather = weather;
+
+        author.addSchedule(schedule);
         return schedule;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-        user.getSchedules()
-            .add(this);
-    }
 
-    public void update(String title, String contents){
+    public void update(String title, String contents) {
         this.todoTitle = title;
         this.todoContents = contents;
     }
 
-    public Long getUserId() {
-        return user.getId();
+    public void removeManager(ScheduleUser scheduleUser) {
+        managedUser.remove(scheduleUser);
     }
 
-    public List<CommentDto> getCommentsDto() {
-        return comments.stream()
-            .map(CommentDto::createCommentDto)
-            .toList();
-    }
-
-    public List<ScheduleManagerInfoDto> getManagersDto() {
-        return scheduleManagers.stream()
-            .map(scheduleManager -> ScheduleManagerInfoDto.createScheduleManagerInfoDto(
-                scheduleManager.getUser()))
-            .toList();
+    public void addManager(ScheduleUser scheduleUser) {
+        managedUser.add(scheduleUser);
     }
 }

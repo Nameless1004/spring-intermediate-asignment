@@ -22,6 +22,7 @@ public class ScheduleUser {
     @GeneratedValue
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -32,20 +33,16 @@ public class ScheduleUser {
 
     public static ScheduleUser createScheduleManager(Schedule schedule, User user) {
         ScheduleUser manager = new ScheduleUser();
-        manager.setSchedule(schedule);
-        manager.setUser(user);
+        manager.schedule = schedule;
+        manager.user = user;
+        user.addManagedSchedule(manager);
+        schedule.addManager(manager);
         return manager;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-        this.schedule.getScheduleManagers()
-            .add(this);
+    public void removeScheduleUser() {
+        this.user.removeManagedSchedule(this);
+        this.schedule.removeManager(this);
     }
 
-    public void setUser(User user) {
-        this.user = user;
-        this.user.getSchedulesManagers()
-            .add(this);
-    }
 }
