@@ -41,7 +41,12 @@ public class Comment extends BaseTimeEntity {
     private String contents;
 
 
-    // 생성 메서드
+    /**
+     * 댓글 엔터티 생성
+     * @param schedule 일정
+     * @param dto 댓글DTO
+     * @return 생성된 엔터티
+     */
     public static Comment createComment(Schedule schedule, CommentDto dto) {
         Comment comment = Comment.builder()
             .id(dto.getCommentId())
@@ -55,6 +60,10 @@ public class Comment extends BaseTimeEntity {
         return comment;
     }
 
+    /**
+     * 댓글 업데이트
+     * @param contents 수정 내용
+     */
     public void update(String contents) {
         this.contents = contents;
     }

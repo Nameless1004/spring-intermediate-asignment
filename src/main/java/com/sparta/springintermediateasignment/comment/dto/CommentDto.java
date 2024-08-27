@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @Getter
 @Builder
 @NoArgsConstructor
@@ -27,6 +26,11 @@ public class CommentDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    /**
+     * 댓글 DTO 생성
+     * @param comment 댓글 엔터티
+     * @return
+     */
     public static CommentDto createCommentDto(Comment comment) {
         return CommentDto.builder()
             .commentId(comment.getId())

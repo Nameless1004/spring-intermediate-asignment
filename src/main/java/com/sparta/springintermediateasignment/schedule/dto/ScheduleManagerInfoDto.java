@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
 @Getter
 @AllArgsConstructor
@@ -21,9 +20,9 @@ public class ScheduleManagerInfoDto {
     public static ScheduleManagerInfoDto createScheduleManagerInfoDto(User user) {
         ScheduleManagerInfoDto dto = new ScheduleManagerInfoDto();
 
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
+        dto.id = user.getId();
+        dto.name = user.getName();
+        dto.email = user.getEmail();
         return dto;
     }
 }

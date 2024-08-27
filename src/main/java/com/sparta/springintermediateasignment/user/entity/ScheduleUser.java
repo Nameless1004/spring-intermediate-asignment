@@ -40,6 +40,9 @@ public class ScheduleUser {
         return manager;
     }
 
+    /**
+     * 일정유저 엔터티 삭제, 삭제 시 연관된 user와 schedule에서 해당 엔터티 삭제 처리
+     */
     public void removeScheduleUser() {
         this.user.removeManagedSchedule(this);
         this.schedule.removeManager(this);

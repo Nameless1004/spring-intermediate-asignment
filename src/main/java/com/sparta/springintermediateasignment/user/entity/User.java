@@ -72,4 +72,10 @@ public class User extends BaseTimeEntity {
     public void removeSchedule(Schedule schedule) {
         createdSchedules.remove(schedule);
     }
+
+    public void update(UserDto userDto) {
+        name = userDto.getName();
+        role = userDto.getRole();
+        email = userDto.getEmail();
+    }
 }

@@ -35,6 +35,10 @@ public class UserService {
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    /**
+     * 유저 삭제
+     * @param id 유저 아이디
+     */
     public void deleteUser(Long id) {
         User user = getUser(id);
 
@@ -43,14 +47,22 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    /**
+     * 유저 업데이트
+     * @param id 유저 아이디
+     * @param userDto 수정 정보
+     * @return 수정한 유저 정보 DTO
+     */
     public UserDto updateUser(Long id, UserDto userDto) {
         User user = getUser(id);
-
-        // 수정
-        userRepository.save(user);
+        user.update(userDto);
         return userDto;
     }
 
+    /**
+     * 유저 목록 조회
+     * @return 유저 목록
+     */
     @Transactional(readOnly = true)
     public List<UserDto> findUsers() {
         return userRepository.findAll()
@@ -59,6 +71,11 @@ public class UserService {
             .toList();
     }
 
+    /**
+     * 유저 id로 조회
+     * @param id 유저 아이디
+     * @return 조회 유저 정보
+     */
     @Transactional(readOnly = true)
     public UserDto findById(Long id) {
         return UserDto.of(getUser(id));
@@ -66,8 +83,7 @@ public class UserService {
 
     /**
      * 일정에 담당자 추가
-     *
-     * @param requestDto
+     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
      */
     public void addManager(AddScheduleManagerDto requestDto) {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
@@ -100,7 +116,7 @@ public class UserService {
     /**
      * 담당 매니저 삭제
      *
-     * @param requestDto
+     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
      */
     public void deleteManager(AddScheduleManagerDto requestDto) {
         ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(
@@ -126,7 +142,7 @@ public class UserService {
     /**
      * 회원 가입
      *
-     * @param requestDto
+     * @param requestDto 회원가입 DTO
      * @return jwt토큰 반환
      */
     public JwtTokenResponseDto join(SignupRequestDto requestDto) {
@@ -164,7 +180,7 @@ public class UserService {
 
     /**
      * 로그인
-     *
+     * @param requestDto 로그인 DTO
      * @return jwt 토큰 반환
      */
     @Transactional(readOnly = true)
@@ -189,8 +205,7 @@ public class UserService {
 
     /**
      * 유저 유효성 검사
-     *
-     * @param id
+     * @param id 유저 아이디
      * @return 해당 아이디의 유저가 존재하면 엔티티 반환
      */
     private User getUser(Long id) {
