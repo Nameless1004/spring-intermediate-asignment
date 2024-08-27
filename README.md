@@ -49,4 +49,5 @@
 ![](./images/erd.png)
 
 # 도커
-docker pull nameless1004/spring-boot-app:1.0
+**도커 주소**
+https://hub.docker.com/r/nameless1004/spring-boot-app/tags
