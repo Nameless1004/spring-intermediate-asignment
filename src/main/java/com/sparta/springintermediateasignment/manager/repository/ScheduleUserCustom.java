@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.user.repository;
+package com.sparta.springintermediateasignment.manager.repository;
 
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.user.entity.ScheduleUser;

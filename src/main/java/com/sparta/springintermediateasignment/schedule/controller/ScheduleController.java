@@ -66,23 +66,4 @@ public class ScheduleController {
             .build();
     }
 
-    // 일정 담당자 등록
-    @PostMapping("/{scheduleId}/managers")
-    public ResponseEntity<Void> addScheduleManager(@PathVariable("scheduleId") Long scheduleId,
-        @Valid @RequestBody AddScheduleManagerDto userDto) {
-        service.registManager(scheduleId, userDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .build();
-    }
-
-    // 일정 담당자 삭제
-    @DeleteMapping("/{scheduleId}/managers/{managerId}")
-    public ResponseEntity<Void> deleteScheduleManager( @PathVariable("scheduleId") Long scheduleId,
-        @PathVariable("managerId") Long managerId,
-        @Valid @RequestBody RemoveSchedueManagerDto userDto) {
-        service.unregistManager(scheduleId, managerId, userDto);
-        return ResponseEntity.ok()
-            .build();
-    }
-
 }

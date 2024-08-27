@@ -11,4 +11,10 @@ public class RemoveSchedueManagerDto {
 
     @NotNull
     Long authorId;
+
+    @NotNull
+    Long schedueId;
+
+    @NotNull
+    Long userId;
 }

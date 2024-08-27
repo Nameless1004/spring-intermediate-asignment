@@ -1,8 +1,6 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
 import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
-import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
-import com.sparta.springintermediateasignment.schedule.dto.RemoveSchedueManagerDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
@@ -10,11 +8,10 @@ import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
-import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
-import com.sparta.springintermediateasignment.user.repository.ScheduleUserRepository;
+import com.sparta.springintermediateasignment.manager.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
-import com.sparta.springintermediateasignment.weather.WeatherRestService;
+import com.sparta.springintermediateasignment.weather.WeatherService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +27,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleUserRepository scheduleUserRepository;
     private final UserRepository userRepository;
-    private final WeatherRestService weatherService;
+    private final WeatherService weatherService;
 
     /**
      * 일정 등록
@@ -121,60 +118,4 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-
-    /**
-     * 일정에 담당자 추가
-     *
-     * @param scheduleId
-     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
-     */
-    public void registManager(Long scheduleId, AddScheduleManagerDto requestDto) {
-        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
-
-        // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
-        Long authorUserId = requestDto.getAuthorUserId();
-        Long scheduleAuthorUserId = schedule.getAuthor()
-            .getId();
-        if (!scheduleAuthorUserId.equals(authorUserId)) {
-            throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
-        }
-
-        Long managerId = requestDto.getManagerId();
-
-        if (scheduleUserRepository.existsByScheduleIdAndUserId(scheduleId, managerId)) {
-            throw new IllegalArgumentException("이미 등록된 담당자입니다.");
-        }
-
-        User user = userRepository.findByIdOrElseThrow(managerId);
-
-        ScheduleUser su = ScheduleUser.createScheduleManager(schedule, user);
-        scheduleUserRepository.save(su);
-    }
-
-    /**
-     * 담당 매니저 삭제
-     *
-     * @param scheduleId
-     * @param managerId
-     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
-     */
-    public void unregistManager(Long scheduleId, Long managerId, RemoveSchedueManagerDto requestDto) {
-        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
-        userRepository.findByIdOrElseThrow(managerId);
-
-        ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(managerId,
-                scheduleId)
-            .orElseThrow(() -> new InvalidIdException("담당 유저 레포지토리", "담당 유저", managerId));
-
-        // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
-        Long authorUserId = requestDto.getAuthorId();
-        Long scheduleAuthorUserId = schedule.getAuthor().getId();
-
-        if (!scheduleAuthorUserId.equals(authorUserId)) {
-            throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
-        }
-
-        scheduleUser.removeScheduleUser();
-        scheduleUserRepository.delete(scheduleUser);
-    }
 }

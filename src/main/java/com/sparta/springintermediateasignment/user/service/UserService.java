@@ -1,20 +1,16 @@
 package com.sparta.springintermediateasignment.user.service;
 
 import com.sparta.springintermediateasignment.common.config.PasswordEncoder;
-import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
 import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatchException;
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
-import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
-import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
-import com.sparta.springintermediateasignment.user.entity.ScheduleUser;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import com.sparta.springintermediateasignment.user.repository.ScheduleUserRepository;
+import com.sparta.springintermediateasignment.manager.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;

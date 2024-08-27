@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.user.repository;
+package com.sparta.springintermediateasignment.manager.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -14,5 +14,8 @@ public class AddScheduleManagerDto {
     private Long authorUserId;
 
     @NotNull
+    private Long scheduleId;
+
+    @NotNull
     private Long managerId;
 }
