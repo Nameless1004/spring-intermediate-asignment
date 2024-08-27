@@ -6,7 +6,7 @@ import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatc
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
-import com.sparta.springintermediateasignment.user.dto.AddScheduleManagerDto;
+import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
@@ -40,7 +40,7 @@ public class UserService {
      * @param id 유저 아이디
      */
     public void deleteUser(Long id) {
-        User user = getUser(id);
+        User user = userRepository.findByIdOrElseThrow(id);
 
         // 유저 삭제 시 유저가 작성한 일정이 있으면 삭제 안됨
         // 유저 삭제 시 담당하고 있는 일정이 있으면 삭제 안됨
@@ -54,7 +54,7 @@ public class UserService {
      * @return 수정한 유저 정보 DTO
      */
     public UserDto updateUser(Long id, UserDto userDto) {
-        User user = getUser(id);
+        User user = userRepository.findByIdOrElseThrow(id);
         user.update(userDto);
         return userDto;
     }
@@ -78,65 +78,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public UserDto findById(Long id) {
-        return UserDto.of(getUser(id));
-    }
-
-    /**
-     * 일정에 담당자 추가
-     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
-     */
-    public void addManager(AddScheduleManagerDto requestDto) {
-        Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId())
-            .orElseThrow(
-                () -> new InvalidIdException("일정 레포지토리", "일정", requestDto.getScheduleId()));
-
-        // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
-        Long authorUserId = requestDto.getAuthorUserId();
-        if (!schedule.getAuthor()
-            .getId()
-            .equals(authorUserId)) {
-            throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
-        }
-
-        // 해당 스케쥴 담당자 중복 체크
-        Optional<ScheduleUser> find = scheduleUserRepository.findByUserIdAndScheduleId(
-            requestDto.getUserId(), requestDto.getScheduleId());
-        if (find.isPresent()) {
-            throw new IllegalArgumentException(
-                "이미 등록된 담당자입니다. 스케쥴id: " + requestDto.getScheduleId() + " / 담당자 id: "
-                    + requestDto.getUserId());
-        }
-
-        User user = getUser(requestDto.getUserId());
-
-        ScheduleUser su = ScheduleUser.createScheduleManager(schedule, user);
-        scheduleUserRepository.save(su);
-    }
-
-    /**
-     * 담당 매니저 삭제
-     *
-     * @param requestDto 일정 작성자 ID, 일정 ID, 담당할 유저 ID
-     */
-    public void deleteManager(AddScheduleManagerDto requestDto) {
-        ScheduleUser scheduleUser = scheduleUserRepository.findByUserIdAndScheduleId(
-                requestDto.getUserId(), requestDto.getScheduleId())
-            .orElseThrow(
-                () -> new IllegalArgumentException(
-                    "해당 일정에" + "[ " + requestDto.getScheduleId() + " ]" + "해당하는 해당 유저" + "[ "
-                        + requestDto.getUserId() + " ]" + "가 없습니다."));
-
-        // 작성한 유저와 요청하는 유저의 아이디가 다르다면 throw
-        Long authorUserId = requestDto.getAuthorUserId();
-        Schedule schedule = scheduleUser.getSchedule();
-        if (!schedule.getAuthor()
-            .getId()
-            .equals(authorUserId)) {
-            throw new IllegalArgumentException("해당 일정을 작성한 유저가 아닙니다.");
-        }
-
-        scheduleUser.removeScheduleUser();
-        scheduleUserRepository.delete(scheduleUser);
+        return UserDto.of(userRepository.findByIdOrElseThrow(id));
     }
 
     /**
@@ -201,16 +143,6 @@ public class UserService {
         // 사용자 등록 후 jwt 생성 반환
         String token = jwtUtil.createToken(user.getEmail(), role);
         return new JwtTokenResponseDto(token);
-    }
-
-    /**
-     * 유저 유효성 검사
-     * @param id 유저 아이디
-     * @return 해당 아이디의 유저가 존재하면 엔티티 반환
-     */
-    private User getUser(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 id입니다."));
     }
 
 }

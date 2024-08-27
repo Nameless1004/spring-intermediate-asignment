@@ -37,7 +37,7 @@ public class CommentService {
      * 댓글 업데이트
      */
     public CommentDto updateComment(Long commentId, CommentUpdateDto commentRequestDto) {
-        Comment comment = findCommentInRepository(commentId);
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         comment.update(commentRequestDto.getContents());
 
@@ -48,7 +48,7 @@ public class CommentService {
      * 댓글 삭제
      */
     public void deleteComment(Long commentId) {
-        Comment comment = findCommentInRepository(commentId);
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
         commentRepository.delete(comment);
     }
 
@@ -57,7 +57,7 @@ public class CommentService {
      */
     @Transactional(readOnly = true)
     public CommentDto findOne(Long commentId) {
-        Comment comment = findCommentInRepository(commentId);
+        Comment comment = commentRepository.findByIdOrElseThrow(commentId);
         return CommentDto.createCommentDto(comment);
     }
 
@@ -79,14 +79,4 @@ public class CommentService {
             .toList();
     }
 
-    /**
-     * CommentId가 유효한지 검사
-     *
-     * @return id가 존재하면 엔티티 반환
-     * @throws InvalidIdException
-     */
-    private Comment findCommentInRepository(Long commentId) {
-        return commentRepository.findById(commentId)
-            .orElseThrow(() -> new InvalidIdException("댓글 레포지토리", "댓글", commentId));
-    }
 }

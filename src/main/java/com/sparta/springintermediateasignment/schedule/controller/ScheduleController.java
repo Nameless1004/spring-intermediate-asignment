@@ -1,5 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.controller;
 
+import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
+import com.sparta.springintermediateasignment.schedule.dto.RemoveSchedueManagerDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleResponseDto;
@@ -8,9 +10,11 @@ import com.sparta.springintermediateasignment.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +39,7 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleAllResponseDto>> getSchedules(
+    public ResponseEntity<Page<ScheduleAllResponseDto>> getSchedules(
         @PageableDefault(size = 10, sort = "updatedDate", direction = Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(service.getAllSchedule(pageable));
     }
@@ -58,6 +62,25 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@PathVariable("id") Long id) {
         service.delete(id);
 
+        return ResponseEntity.ok()
+            .build();
+    }
+
+    // 일정 담당자 등록
+    @PostMapping("/{scheduleId}/managers")
+    public ResponseEntity<Void> addScheduleManager(@PathVariable("scheduleId") Long scheduleId,
+        @Valid @RequestBody AddScheduleManagerDto userDto) {
+        service.registManager(scheduleId, userDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .build();
+    }
+
+    // 일정 담당자 삭제
+    @DeleteMapping("/{scheduleId}/managers/{managerId}")
+    public ResponseEntity<Void> deleteScheduleManager( @PathVariable("scheduleId") Long scheduleId,
+        @PathVariable("managerId") Long managerId,
+        @Valid @RequestBody RemoveSchedueManagerDto userDto) {
+        service.unregistManager(scheduleId, managerId, userDto);
         return ResponseEntity.ok()
             .build();
     }

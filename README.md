@@ -24,13 +24,15 @@
 
 ## 📆일정 API
 
-| 기능    | Method | URL                 | request  | response | 상태코드     |
-|-------|--------|---------------------|----------|----------|----------|
-| 일정 등록 | POST   | /api/schedules      | 요청 body  | 등록 정보    | 201:정상등록 |
-| 일정 조회 | GET    | /api/schedules/{id} | 요청 param | 단건 응답 정보 | 200:정상조회 |
-| 일정 조회 | GET    | /api/schedules      | 요청 param | 다건 응답 정보 | 200:정상조회 |
-| 일정 수정 | PATCH  | /api/schedules/{id} | 요청 body  | 수정 정보    | 200:정상수정 |
-| 일정 삭제 | DELETE | /api/schedules/{id} |          |          | 200:정상삭제 |
+| 기능        | Method | URL                                              | request  | response | 상태코드     |
+|-----------|--------|--------------------------------------------------|----------|----------|----------|
+| 일정 등록     | POST   | /api/schedules                                   | 요청 body  | 등록 정보    | 201:정상등록 |
+| 일정 조회     | GET    | /api/schedules/{id}                              | 요청 param | 단건 응답 정보 | 200:정상조회 |
+| 일정 조회     | GET    | /api/schedules                                   | 요청 param | 다건 응답 정보 | 200:정상조회 |
+| 일정 수정     | PATCH  | /api/schedules/{id}                              | 요청 body  | 수정 정보    | 200:정상수정 |
+| 일정 삭제     | DELETE | /api/schedules/{id}                              | -        | -        | 200:정상삭제 |
+| 일정 담당자 등록 | DELETE | /api/schedules/{scheduleId}/managers             | 요청 body  | -        | 201:정상등록 |
+| 일정 담당자 해제 | DELETE | /api/schedules/{scheduleId}/managers/{managerId} | 요청 body  | -        | 200:정상삭제 |
 
 ## 👤유저 API
 
@@ -49,5 +51,6 @@
 ![](./images/erd.png)
 
 # 도커
+
 **도커 주소**
 https://hub.docker.com/r/nameless1004/spring-boot-app/tags

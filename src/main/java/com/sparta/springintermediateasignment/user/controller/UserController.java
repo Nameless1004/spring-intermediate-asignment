@@ -1,6 +1,6 @@
 package com.sparta.springintermediateasignment.user.controller;
 
-import com.sparta.springintermediateasignment.user.dto.AddScheduleManagerDto;
+import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> patchUser(@PathVariable Long id,
+    public ResponseEntity<UserDto> patchUser(@PathVariable("id") Long id,
         @Valid @RequestBody UserDto userDto) {
         return new ResponseEntity<>(service.updateUser(id, userDto), HttpStatus.OK);
     }
@@ -53,24 +53,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         service.deleteUser(id);
-        return ResponseEntity.ok()
-            .build();
-    }
-
-    // 일정 담당자 등록
-    @PostMapping("/schedules")
-    public ResponseEntity<Void> addScheduleManager(
-        @Valid @RequestBody AddScheduleManagerDto userDto) {
-        service.addManager(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .build();
-    }
-
-    // 일정 담당자 삭제
-    @DeleteMapping("/schedules")
-    public ResponseEntity<Void> deleteScheduleManager(
-        @Valid @RequestBody AddScheduleManagerDto userDto) {
-        service.deleteManager(userDto);
         return ResponseEntity.ok()
             .build();
     }

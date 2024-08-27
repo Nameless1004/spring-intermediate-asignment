@@ -1,8 +1,7 @@
-package com.sparta.springintermediateasignment.user.dto;
+package com.sparta.springintermediateasignment.schedule.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +12,7 @@ public class AddScheduleManagerDto {
 
     @NotNull
     private Long authorUserId;
+
     @NotNull
-    private Long scheduleId;
-    @NotNull
-    private Long userId;
+    private Long managerId;
 }

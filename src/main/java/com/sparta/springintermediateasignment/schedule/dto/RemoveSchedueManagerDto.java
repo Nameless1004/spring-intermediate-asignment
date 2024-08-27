@@ -1,16 +1,14 @@
 package com.sparta.springintermediateasignment.schedule.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ScheduleUpdateDto {
+public class RemoveSchedueManagerDto {
 
-    @NotBlank
-    private String title;
-    @NotBlank
-    private String contents;
+    @NotNull
+    Long authorId;
 }
