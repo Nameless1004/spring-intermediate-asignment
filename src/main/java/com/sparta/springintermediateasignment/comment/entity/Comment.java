@@ -43,8 +43,9 @@ public class Comment extends BaseTimeEntity {
 
     /**
      * 댓글 엔터티 생성
+     *
      * @param schedule 일정
-     * @param dto 댓글DTO
+     * @param dto      댓글DTO
      * @return 생성된 엔터티
      */
     public static Comment createComment(Schedule schedule, CommentDto dto) {
@@ -62,6 +63,7 @@ public class Comment extends BaseTimeEntity {
 
     /**
      * 댓글 업데이트
+     *
      * @param contents 수정 내용
      */
     public void update(String contents) {

@@ -3,14 +3,12 @@ package com.sparta.springintermediateasignment.user.service;
 import com.sparta.springintermediateasignment.common.config.PasswordEncoder;
 import com.sparta.springintermediateasignment.common.exceptoins.PasswordMissmatchException;
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
-import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;
 import com.sparta.springintermediateasignment.user.dto.UserDto;
 import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import com.sparta.springintermediateasignment.manager.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final ScheduleUserRepository scheduleUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -33,6 +29,7 @@ public class UserService {
 
     /**
      * 유저 삭제
+     *
      * @param id 유저 아이디
      */
     public void deleteUser(Long id) {
@@ -45,7 +42,8 @@ public class UserService {
 
     /**
      * 유저 업데이트
-     * @param id 유저 아이디
+     *
+     * @param id      유저 아이디
      * @param userDto 수정 정보
      * @return 수정한 유저 정보 DTO
      */
@@ -57,6 +55,7 @@ public class UserService {
 
     /**
      * 유저 목록 조회
+     *
      * @return 유저 목록
      */
     @Transactional(readOnly = true)
@@ -69,6 +68,7 @@ public class UserService {
 
     /**
      * 유저 id로 조회
+     *
      * @param id 유저 아이디
      * @return 조회 유저 정보
      */
@@ -118,6 +118,7 @@ public class UserService {
 
     /**
      * 로그인
+     *
      * @param requestDto 로그인 DTO
      * @return jwt 토큰 반환
      */

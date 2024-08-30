@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.user.filter;
+package com.sparta.springintermediateasignment.common.filter;
 
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 
 @Slf4j(topic = "AdminFilter")
 @Component
-@Order(3)
+@Order(2)
 @RequiredArgsConstructor
 public class AdminFilter implements Filter {
 
@@ -45,7 +45,7 @@ public class AdminFilter implements Filter {
 
             if ((method.equals("DELETE") || method.equals("PATCH")) && role.equals(
                 UserRole.USER.getAuthority())) {
-                jwtUtil.jwtExceptionHandler((HttpServletResponse) response,
+                jwtUtil.jwtExceptionHandle((HttpServletResponse) response,
                     new ErrorInfo("권한이 없습니다.", HttpStatus.FORBIDDEN), log);
                 return;
             }

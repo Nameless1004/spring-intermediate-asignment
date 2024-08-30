@@ -5,6 +5,7 @@ import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdExcepti
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentCustom {
+
     /**
      * CommentId가 유효한지 검사
      *

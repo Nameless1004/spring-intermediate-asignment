@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +27,7 @@ public class CommentDto {
 
     /**
      * 댓글 DTO 생성
+     *
      * @param comment 댓글 엔터티
      * @return
      */

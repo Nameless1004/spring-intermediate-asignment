@@ -1,13 +1,10 @@
 package com.sparta.springintermediateasignment.weather;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,21 +37,18 @@ public class WeatherService {
     private void init() {
         log.info("weather init");
         // 없으면 불러와서 캐싱
-        String weatherJson = weatherAPI.getWeather();
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<WeatherDataDto> weatherDataListDto = objectMapper.readValue(weatherJson,
-                new TypeReference<List<WeatherDataDto>>() {
-                });
-            if (weatherDataListDto == null || weatherDataListDto.isEmpty()) {
-                throw new IllegalStateException("weather data is null");
-            }
+        WeatherDataDto[] weatherDtoList = weatherAPI.getWeather();
 
-            for (WeatherDataDto weatherDataDto : weatherDataListDto) {
-                weatherByDate.put(weatherDataDto.getDate(), weatherDataDto.getWeather());
-            }
-        } catch (Exception e) {
+        if (weatherDtoList == null || weatherDtoList.length == 0) {
             throw new IllegalStateException("weather data is null");
+        }
+
+        for (WeatherDataDto weatherDataDto : weatherDtoList) {
+            weatherByDate.put(weatherDataDto.getDate(), weatherDataDto.getWeather());
+        }
+
+        for (WeatherDataDto weatherDataDto : weatherDtoList) {
+            System.out.println(weatherDataDto.toString());
         }
     }
 

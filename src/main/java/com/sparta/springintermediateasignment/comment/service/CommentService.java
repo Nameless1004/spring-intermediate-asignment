@@ -23,20 +23,21 @@ public class CommentService {
     /**
      * 댓글 등록
      */
-    public Long saveComment(CommentDto commentRequestDto) {
-        Schedule schedule = scheduleRepository.findById(commentRequestDto.getScheduleId())
+    public CommentDto saveComment(Long scheduleId, CommentDto commentRequestDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
             .orElseThrow(
                 () -> new InvalidIdException("일정 레포지토리", "일정", commentRequestDto.getScheduleId()));
 
         Comment comment = Comment.createComment(schedule, commentRequestDto);
-        commentRepository.save(comment);
-        return comment.getId();
+        Comment save = commentRepository.save(comment);
+        return CommentDto.createCommentDto(save);
     }
 
     /**
      * 댓글 업데이트
      */
-    public CommentDto updateComment(Long commentId, CommentUpdateDto commentRequestDto) {
+    public CommentDto updateComment(Long scheduleId, Long commentId,
+        CommentUpdateDto commentRequestDto) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
 
         comment.update(commentRequestDto.getContents());
@@ -47,8 +48,14 @@ public class CommentService {
     /**
      * 댓글 삭제
      */
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long scheduleId, Long commentId) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+        if (!comment.getSchedule()
+            .getId()
+            .equals(scheduleId)) {
+            throw new IllegalArgumentException("해당 일정에 포함되지 않은 댓글입니다.");
+        }
+
         commentRepository.delete(comment);
     }
 
@@ -56,8 +63,15 @@ public class CommentService {
      * 댓글 단건 조회
      */
     @Transactional(readOnly = true)
-    public CommentDto findOne(Long commentId) {
+    public CommentDto findOne(Long scheduleId, Long commentId) {
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
+
+        if (!comment.getSchedule()
+            .getId()
+            .equals(scheduleId)) {
+            throw new IllegalArgumentException("해당 일정에 포함되지 않은 댓글입니다.");
+        }
+
         return CommentDto.createCommentDto(comment);
     }
 
@@ -65,15 +79,11 @@ public class CommentService {
      * 댓글 다건 조회
      */
     @Transactional(readOnly = true)
-    public List<CommentDto> findComments() {
-        return commentRepository.findAll()
-            .stream()
-            .map(CommentDto::createCommentDto)
-            .toList();
-    }
+    public List<CommentDto> findComments(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+        List<Comment> comments = schedule.getComments();
 
-    public List<CommentDto> findCommentsByScheduleId(Long scheduleId) {
-        return commentRepository.findByScheduleId(scheduleId)
+        return comments
             .stream()
             .map(CommentDto::createCommentDto)
             .toList();

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleUserRepository extends JpaRepository<ScheduleUser, Long>,
     ScheduleUserCustom {
+
     boolean existsByScheduleIdAndUserId(Long scheduleId, Long userId);
 }
 

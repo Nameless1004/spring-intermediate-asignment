@@ -4,6 +4,7 @@ import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+
     /**
      * ScheduleId가 유효한지 검사
      *

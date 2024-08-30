@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.user.filter;
+package com.sparta.springintermediateasignment.common.filter;
 
 import com.sparta.springintermediateasignment.common.util.JwtUtil;
 import com.sparta.springintermediateasignment.user.entity.User;
@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 
 @Slf4j(topic = "AuthFilter")
 @Component
-@Order(2)
+@Order(1)
 @RequiredArgsConstructor
 public class AuthFilter implements Filter {
 
@@ -59,7 +59,7 @@ public class AuthFilter implements Filter {
 
                 // 토큰 검증
                 if (!jwtUtil.validateToken(token, errorInfo)) {
-                    jwtUtil.jwtExceptionHandler((HttpServletResponse) response, errorInfo, log);
+                    jwtUtil.jwtExceptionHandle((HttpServletResponse) response, errorInfo, log);
                     return;
                 }
 
@@ -72,7 +72,7 @@ public class AuthFilter implements Filter {
                 request.setAttribute("user", user);
                 chain.doFilter(request, response); // 다음 Filter 로 이동
             } else {
-                jwtUtil.jwtExceptionHandler((HttpServletResponse) response,
+                jwtUtil.jwtExceptionHandle((HttpServletResponse) response,
                     new ErrorInfo("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST), log);
             }
         }

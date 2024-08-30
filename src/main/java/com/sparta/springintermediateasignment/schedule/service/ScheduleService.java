@@ -1,6 +1,7 @@
 package com.sparta.springintermediateasignment.schedule.service;
 
 import com.sparta.springintermediateasignment.common.exceptoins.InvalidIdException;
+import com.sparta.springintermediateasignment.manager.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleAllResponseDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleManagerInfoDto;
 import com.sparta.springintermediateasignment.schedule.dto.ScheduleRequestDto;
@@ -9,7 +10,6 @@ import com.sparta.springintermediateasignment.schedule.dto.ScheduleUpdateDto;
 import com.sparta.springintermediateasignment.schedule.entity.Schedule;
 import com.sparta.springintermediateasignment.schedule.repository.ScheduleRepository;
 import com.sparta.springintermediateasignment.user.entity.User;
-import com.sparta.springintermediateasignment.manager.repository.ScheduleUserRepository;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import com.sparta.springintermediateasignment.weather.WeatherService;
 import java.util.List;

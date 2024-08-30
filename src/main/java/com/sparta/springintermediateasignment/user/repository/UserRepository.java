@@ -10,6 +10,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * 유저 유효성 검사
+     *
      * @param id 유저 아이디
      * @return 해당 아이디의 유저가 존재하면 엔티티 반환
      */

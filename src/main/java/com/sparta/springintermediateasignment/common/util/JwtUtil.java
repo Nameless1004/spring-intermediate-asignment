@@ -1,8 +1,8 @@
 package com.sparta.springintermediateasignment.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.springintermediateasignment.common.filter.ErrorInfo;
 import com.sparta.springintermediateasignment.user.enums.UserRole;
-import com.sparta.springintermediateasignment.user.filter.ErrorInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -130,7 +130,7 @@ public class JwtUtil {
         return null;
     }
 
-    public void jwtExceptionHandler(HttpServletResponse response, ErrorInfo errorInfo,
+    public void jwtExceptionHandle(HttpServletResponse response, ErrorInfo errorInfo,
         Logger logger) {
         response.setStatus(errorInfo.getHttpStatus()
             .value());

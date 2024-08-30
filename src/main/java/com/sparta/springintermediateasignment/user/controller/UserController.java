@@ -1,6 +1,5 @@
 package com.sparta.springintermediateasignment.user.controller;
 
-import com.sparta.springintermediateasignment.schedule.dto.AddScheduleManagerDto;
 import com.sparta.springintermediateasignment.user.dto.JwtTokenResponseDto;
 import com.sparta.springintermediateasignment.user.dto.LoginRequestDto;
 import com.sparta.springintermediateasignment.user.dto.SignupRequestDto;

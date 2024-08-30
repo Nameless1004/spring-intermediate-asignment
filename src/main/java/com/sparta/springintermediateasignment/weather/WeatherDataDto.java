@@ -1,17 +1,16 @@
 package com.sparta.springintermediateasignment.weather;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class WeatherDataDto {
+
     String date;
     String weather;
 }

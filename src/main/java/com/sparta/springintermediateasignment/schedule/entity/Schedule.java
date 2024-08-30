@@ -54,10 +54,11 @@ public class Schedule extends BaseTimeEntity {
 
     /**
      * 일정 엔터티 생성
-     * @param author 작성 유저 엔터티
-     * @param todoTitle 일정 제목
+     *
+     * @param author       작성 유저 엔터티
+     * @param todoTitle    일정 제목
      * @param todoContents 일정 내용
-     * @param weather 날씨
+     * @param weather      날씨
      * @return 생성된 일정 엔터티
      */
     public static Schedule createSchedule(User author, String todoTitle, String todoContents,
@@ -74,7 +75,8 @@ public class Schedule extends BaseTimeEntity {
 
     /**
      * 일정 업데이트
-     * @param title 수정될 제목
+     *
+     * @param title    수정될 제목
      * @param contents 수정될 내용
      */
     public void update(String title, String contents) {
@@ -84,6 +86,7 @@ public class Schedule extends BaseTimeEntity {
 
     /**
      * 해당 일정 담당자 제거
+     *
      * @param scheduleUser 일정담당유저 엔터티
      */
     public void removeManager(ScheduleUser scheduleUser) {
@@ -92,6 +95,7 @@ public class Schedule extends BaseTimeEntity {
 
     /**
      * 해당 일정 담당자 추가
+     *
      * @param scheduleUser 일정담당유저 엔터티
      */
     public void addManager(ScheduleUser scheduleUser) {

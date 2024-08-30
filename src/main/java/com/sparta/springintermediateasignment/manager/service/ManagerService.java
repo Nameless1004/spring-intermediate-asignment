@@ -11,9 +11,11 @@ import com.sparta.springintermediateasignment.user.entity.User;
 import com.sparta.springintermediateasignment.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ManagerService {
 
     private final ScheduleUserRepository scheduleUserRepository;
@@ -38,7 +40,8 @@ public class ManagerService {
 
         Long managerId = requestDto.getManagerId();
 
-        if (scheduleUserRepository.existsByScheduleIdAndUserId(requestDto.getScheduleId(), managerId)) {
+        if (scheduleUserRepository.existsByScheduleIdAndUserId(requestDto.getScheduleId(),
+            managerId)) {
             throw new IllegalArgumentException("이미 등록된 담당자입니다.");
         }
 

@@ -1,4 +1,4 @@
-package com.sparta.springintermediateasignment.user.filter;
+package com.sparta.springintermediateasignment.common.filter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

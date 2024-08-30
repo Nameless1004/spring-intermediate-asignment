@@ -1,8 +1,5 @@
 package com.sparta.springintermediateasignment.user.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.Arrays;
-
 public enum UserRole {
     USER(Authority.USER),  // 사용자 권한
     ADMIN(Authority.ADMIN);  // 관리자 권한
